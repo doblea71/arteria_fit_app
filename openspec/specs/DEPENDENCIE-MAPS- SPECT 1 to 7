@@ -1,0 +1,13 @@
+## Mapa de Dependencias entre SPECs
+```text
+SPEC-002 (Tema)
+    └──> SPEC-006 (Contraste Cards)   [SPEC-006 requiere que SPEC-002 esté resuelto]
+    └──> SPEC-005 (Actividad Screen)  [debe cumplir tema]
+
+SPEC-004 (SQLite / Seguimiento)
+    └──> SPEC-005 (Actividad Screen)  [consume DatabaseService]
+    └──> Dashboard buildProgressCard() dinámico
+
+SPEC-001 (Respiración final)          [independiente]
+SPEC-003 (Vibración)                  [independiente]
+SPEC-007 (Card Calabaza)              [independiente]
