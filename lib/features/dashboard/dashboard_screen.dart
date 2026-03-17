@@ -13,7 +13,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+class _DashboardScreenState extends ConsumerState<DashboardScreen>
+    with WidgetsBindingObserver {
   int _breathingCompleted = 0;
   int _breathingGoal = 3;
   int _isometricCompleted = 0;
@@ -23,7 +24,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadProgress();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadProgress();
+    }
   }
 
   Future<void> _loadProgress() async {
@@ -145,6 +160,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         onTap: (index) {
+          if (index == 1) context.push('/activity');
           if (index == 2) context.push('/nutrition');
           if (index == 3) context.push('/settings');
         },

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/providers/exercise_provider.dart';
 import '../../core/services/database_service.dart';
+import '../../core/services/haptic_service.dart';
 
 enum BreathingPhase { inhale, hold, exhale, resting }
 
@@ -24,6 +25,7 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   int _secondsLeft = 300;
   Timer? _timer;
   bool _isActive = false;
+  bool _isFinalCycle = false;
 
   final int _inhaleSec = 4;
   final int _holdSec = 7;
@@ -42,12 +44,14 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     setState(() {
       _isActive = true;
       _secondsLeft = 300;
+      _isFinalCycle = false;
     });
     _runBreathingCycle();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_secondsLeft > 0) {
         setState(() => _secondsLeft--);
       } else {
+        _isFinalCycle = true;
         _stopSession();
       }
     });
@@ -62,11 +66,13 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
 
     if (!_isActive) return;
 
+    HapticService().phaseChange();
     setState(() => _currentPhase = BreathingPhase.hold);
     await Future.delayed(Duration(seconds: _holdSec));
 
     if (!_isActive) return;
 
+    HapticService().phaseChange();
     setState(() => _currentPhase = BreathingPhase.exhale);
     _breathingController.duration = Duration(seconds: _exhaleSec);
     await _breathingController.reverse();
@@ -74,7 +80,15 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     if (_isActive) _runBreathingCycle();
   }
 
-  void _stopSession() {
+  void _runFinalExhale() async {
+    if (!_isFinalCycle) return;
+    
+    setState(() => _currentPhase = BreathingPhase.exhale);
+    _breathingController.duration = Duration(seconds: _exhaleSec);
+    _breathingController.value = 1.0;
+    
+    await Future.delayed(Duration(seconds: _exhaleSec));
+    
     _timer?.cancel();
     _breathingController.stop();
     setState(() {
@@ -84,15 +98,27 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     _registerExercise();
   }
 
-  Future<void> _registerExercise() async {
-    if (_secondsLeft == 0) {
-      final db = DatabaseService();
-      await db.insertExerciseLog(
-        exerciseType: 'breathing',
-        durationSeconds: 300,
-      );
-      ref.read(exerciseCompletedProvider.notifier).increment();
+  void _stopSession() {
+    _timer?.cancel();
+    _breathingController.stop();
+    
+    if (_isFinalCycle) {
+      _runFinalExhale();
+    } else {
+      setState(() {
+        _isActive = false;
+        _currentPhase = BreathingPhase.resting;
+      });
     }
+  }
+
+  Future<void> _registerExercise() async {
+    final db = DatabaseService();
+    await db.insertExerciseLog(
+      exerciseType: 'breathing',
+      durationSeconds: 300,
+    );
+    ref.read(exerciseCompletedProvider.notifier).increment();
   }
 
   String get _phaseText {

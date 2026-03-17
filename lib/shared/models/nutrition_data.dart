@@ -65,10 +65,10 @@ class NutritionData {
       description: 'Los nitratos se convierten en óxido nítrico, que dilata las arterias rápidamente.',
     ),
     FoodItem(
-      name: 'Semillas de Sandía',
+      name: 'Semillas de Calabaza',
       category: 'Nitratos',
       benefit: 'Mejora el flujo sanguíneo',
-      icon: '🍉',
+      icon: '🎃',
       description: 'Contienen compuestos que ayudan a la síntesis de óxido nítrico.',
     ),
   ];

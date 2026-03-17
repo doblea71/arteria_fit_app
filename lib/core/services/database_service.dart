@@ -100,4 +100,12 @@ class DatabaseService {
     final logs = await getLogsToday();
     return logs.where((log) => log['exercise_type'] == exerciseType).length;
   }
+
+  Future<List<Map<String, dynamic>>> getAllLogs() async {
+    final db = await database;
+    return await db.query(
+      'exercise_log',
+      orderBy: 'completed_at DESC',
+    );
+  }
 }

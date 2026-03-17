@@ -1,23 +1,23 @@
 # SPEC-007 — Corrección de Contenido: Card de Semillas de Calabaza (nutrition_screen.dart)
 
-## Status: Proposed
+## Status: Implemented
 
 ## Context
 
-Al final de la pantalla de nutrición existe un Card que describe las "Semillas de 
+Al final de la pantalla de nutrición existe un Card que describe las "Semillas de
 Sandía", siendo incorrecto. El contenido corresponde a las Semillas de Calabaza.
 
 ## Requirements
 
 ### REQ-007-1 — Corrección del texto del Card
 
-El texto del Card al final de la pantalla de nutrición DEBE referirse a las 
+El texto del Card al final de la pantalla de nutrición DEBE referirse a las
 Semillas de Calabaza, no a las Semillas de Sandía.
 
 ### REQ-007-2 — Corrección del ícono del Card
 
-El ícono del Card DEBE ser alegórico a la calabaza o a sus semillas. 
-Si no existe un ícono estándar disponible en el set actual, se DEBE usar el 
+El ícono del Card DEBE ser alegórico a la calabaza o a sus semillas.
+Si no existe un ícono estándar disponible en el set actual, se DEBE usar el
 ícono más representativo disponible o un asset personalizado.
 
 ## Acceptance Criteria

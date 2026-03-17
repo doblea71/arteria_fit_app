@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/providers/exercise_provider.dart';
 import '../../core/services/database_service.dart';
+import '../../core/services/haptic_service.dart';
 
 class IsometricsScreen extends ConsumerStatefulWidget {
   const IsometricsScreen({super.key});
@@ -43,6 +44,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
     _timer?.cancel();
     if (!_isResting) {
       if (_currentSet < _totalSets) {
+        HapticService().phaseChange();
         setState(() {
           _isResting = true;
           _secondsLeft = _restTime;
@@ -53,6 +55,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
         _showCompletionDialog();
       }
     } else {
+      HapticService().phaseChange();
       setState(() {
         _isResting = false;
         _currentSet++;

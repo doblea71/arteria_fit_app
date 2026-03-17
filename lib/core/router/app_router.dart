@@ -4,6 +4,7 @@ import '../../features/breathing/breathing_screen.dart';
 import '../../features/isometrics/isometrics_screen.dart';
 import '../../features/nutrition/nutrition_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/activity/activity_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -27,6 +28,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/activity',
+      builder: (context, state) => const ActivityScreen(),
     ),
   ],
 );

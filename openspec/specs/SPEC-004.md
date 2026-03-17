@@ -1,6 +1,6 @@
 # SPEC-004 — Seguimiento de Objetivos Diarios con SQLite
 
-## Status: Proposed
+## Status: Implemented
 
 ## Context
 
