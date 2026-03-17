@@ -18,7 +18,7 @@ El widget `buildProgressCard()` del dashboard actualmente muestra datos estátic
 
 ### Modified Capabilities
 
-- Ninguno - es una funcionalidad nueva
+- Ninguno - es una funcionalidad nueva.
 
 ## Impact
 

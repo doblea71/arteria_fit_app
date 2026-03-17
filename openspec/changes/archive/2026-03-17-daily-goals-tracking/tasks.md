@@ -46,7 +46,7 @@
 ## 8. Verificación
 
 - [x] 8.1 Ejecutar `flutter analyze` para verificar errores
-- [ ] 8.2 Probar registro de ejercicio de respiración
-- [ ] 8.3 Probar registro de ejercicio isométrico
-- [ ] 8.4 Probar cambio de metas en Ajustes
-- [ ] 8.5 Verificar que dashboard muestra progreso correcto
+- [x] 8.2 Probar registro de ejercicio de respiración
+- [x] 8.3 Probar registro de ejercicio isométrico
+- [x] 8.4 Probar cambio de metas en Ajustes
+- [x] 8.5 Verificar que dashboard muestra progreso correcto
