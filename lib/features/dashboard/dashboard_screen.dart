@@ -44,7 +44,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
 
   Future<void> _loadProgress() async {
     final db = DatabaseService();
-    
+
     final breathingCompleted = await db.getCompletedTodayCount('breathing');
     final breathingGoal = await db.getDailyGoal('breathing');
     final isometricCompleted = await db.getCompletedTodayCount('isometric');
@@ -114,13 +114,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                   children: [
                     _buildProgressCard(context),
                     const SizedBox(height: 24),
-                    _buildBloodPressureCard(context),
-                    const SizedBox(height: 24),
                     Text(
                       'Ejercicios del día',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     if (_isLoading)
@@ -152,6 +149,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                         ),
                       ),
                     ],
+                    const SizedBox(height: 24),
+                    _buildBloodPressureCard(context),
                   ],
                 ),
               ),
@@ -274,7 +273,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
 
   Widget _buildBloodPressureCard(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return GestureDetector(
       onTap: () => context.push('/blood-pressure'),
       child: Container(
@@ -282,7 +281,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -304,12 +305,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                         color: Colors.redAccent.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(LucideIcons.heartPulse, color: Colors.redAccent, size: 20),
+                      child: const Icon(
+                        LucideIcons.heartPulse,
+                        color: Colors.redAccent,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     const Text(
                       'Presión Arterial',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -352,7 +360,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
                   'Registra tu tensión hoy',
-                  style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             const SizedBox(height: 12),
@@ -361,7 +372,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(LucideIcons.plusCircle, size: 16, color: colorScheme.primary),
+                Icon(
+                  LucideIcons.plusCircle,
+                  size: 16,
+                  color: colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Nuevo registro',
@@ -379,7 +394,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     );
   }
 
-  Widget _readingItem(BuildContext context, {required String value, required String label, required String unit}) {
+  Widget _readingItem(
+    BuildContext context, {
+    required String value,
+    required String label,
+    required String unit,
+  }) {
     return Column(
       children: [
         Text(
@@ -391,14 +411,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
         Text(
           unit,
           style: TextStyle(
             fontSize: 10,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.3),
           ),
         ),
       ],
@@ -444,7 +468,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -458,7 +484,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                   '$completed / $goal',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isComplete ? Colors.green : Theme.of(context).colorScheme.primary,
+                    color: isComplete
+                        ? Colors.green
+                        : Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 if (isComplete)

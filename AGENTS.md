@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Solucionado error de versión mínima de Gradle (Actualizado a 8.13-bin), actualizado pubspec.yaml (v1.6.2+6).
+*Última actualización: 2026-03-18 - Corregido error de ruta del keystore en android/key.properties (cambiado a ruta relativa), actualizado pubspec.yaml (v1.6.4+8).

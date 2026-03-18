@@ -1,4 +1,4 @@
-## Why
+# Why
 
 El ejercicio isométrico en isometrics_screen.dart actualmente no tiene implementada ninguna señal háptica. El usuario necesita ser notificado en cada cambio de fase (contracción → descanso → contracción) sin tener que mirar la pantalla durante el ejercicio.
 

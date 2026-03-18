@@ -1,4 +1,4 @@
-## 1. HapticService Extension
+# 1. HapticService Extension
 
 - [x] 1.1 Add `vibration` package to pubspec.yaml with version constraint
 - [x] 1.2 Add `contractionPhase()` method to HapticService (double pulse pattern)

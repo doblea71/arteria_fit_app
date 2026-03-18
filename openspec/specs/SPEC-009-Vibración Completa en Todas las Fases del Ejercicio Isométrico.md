@@ -1,6 +1,6 @@
 # SPEC-009 — Implementación de Vibración en Ciclos del Ejercicio Isométrico
 
-## Status: Proposed
+## Status: Implemented
 
 ## Context
 
