@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Corregido error de ruta del keystore en android/key.properties (cambiado a ruta relativa), actualizado pubspec.yaml (v1.6.4+8).
+*Última actualización: 2026-03-18 - Corregida implementación de vibración en ejercicio isométrico (SPEC-009): añadido permiso en manifest, ajustados patrones y disparador inicial, actualizado pubspec.yaml (v1.6.5+9).

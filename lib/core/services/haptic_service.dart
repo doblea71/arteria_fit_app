@@ -25,10 +25,10 @@ class HapticService {
   Future<void> contractionPhase() async {
     try {
       if (await Vibration.hasVibrator()) {
-        Vibration.vibrate(pattern: [0, 200, 100, 400]);
+        Vibration.vibrate(pattern: [0, 100, 50, 100]);
       } else {
         await HapticFeedback.heavyImpact();
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 50));
         await HapticFeedback.heavyImpact();
       }
     } catch (e) {

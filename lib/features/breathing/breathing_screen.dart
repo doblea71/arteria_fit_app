@@ -24,6 +24,8 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   BreathingPhase _currentPhase = BreathingPhase.resting;
   int _secondsLeft = 300;
   Timer? _timer;
+  Timer? _phaseCountdownTimer;
+  int _phaseCountdown = 0;
   bool _isActive = false;
   bool _isFinalCycle = false;
 
@@ -61,22 +63,50 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     });
   }
 
+  void _startPhaseCountdown(int seconds) {
+    _phaseCountdownTimer?.cancel();
+    setState(() {
+      _phaseCountdown = seconds;
+    });
+    _phaseCountdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        if (_phaseCountdown > 0) {
+          _phaseCountdown--;
+        }
+      });
+    });
+  }
+
+  void _cancelPhaseCountdown() {
+    _phaseCountdownTimer?.cancel();
+  }
+
   void _runBreathingCycle() async {
     if (!_isActive || !mounted) return;
 
+    _cancelPhaseCountdown();
     setState(() => _currentPhase = BreathingPhase.inhale);
+    _startPhaseCountdown(_inhaleSec);
     _breathingController.duration = Duration(seconds: _inhaleSec);
     await _breathingController.forward();
 
     if (!_isActive || !mounted) return;
 
+    _cancelPhaseCountdown();
     setState(() => _currentPhase = BreathingPhase.hold);
+    _startPhaseCountdown(_holdSec);
     HapticService().phaseChange();
     await Future.delayed(Duration(seconds: _holdSec));
 
     if (!_isActive || !mounted) return;
 
+    _cancelPhaseCountdown();
     setState(() => _currentPhase = BreathingPhase.exhale);
+    _startPhaseCountdown(_exhaleSec);
     HapticService().phaseChange();
     _breathingController.duration = Duration(seconds: _exhaleSec);
     await _breathingController.reverse();
@@ -87,7 +117,9 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   void _runFinalExhale() async {
     if (!_isFinalCycle || !mounted) return;
     
+    _cancelPhaseCountdown();
     setState(() => _currentPhase = BreathingPhase.exhale);
+    _startPhaseCountdown(_exhaleSec);
     _breathingController.duration = Duration(seconds: _exhaleSec);
     _breathingController.value = 1.0;
     
@@ -96,6 +128,7 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     if (!mounted) return;
 
     _timer?.cancel();
+    _cancelPhaseCountdown();
     _breathingController.stop();
     setState(() {
       _isActive = false;
@@ -151,6 +184,7 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   @override
   void dispose() {
     _timer?.cancel();
+    _phaseCountdownTimer?.cancel();
     _breathingController.dispose();
     super.dispose();
   }
@@ -203,38 +237,54 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
             AnimatedBuilder(
               animation: _breathingController,
               builder: (context, child) {
-                return Container(
-                  width: 200 + (100 * _breathingController.value),
-                  height: 200 + (100 * _breathingController.value),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        colorScheme.primary.withValues(alpha: 0.8),
-                        colorScheme.primary.withValues(alpha: 0.2),
-                        Colors.transparent,
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.primary.withValues(
-                          alpha: 0.4 * _breathingController.value,
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Opacity(
+                      opacity: 0.20,
+                      child: Text(
+                        _phaseCountdown > 0 ? '$_phaseCountdown' : '',
+                        style: TextStyle(
+                          fontSize: 200,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
                         ),
-                        blurRadius: 50,
-                        spreadRadius: 20 * _breathingController.value,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      _phaseText,
-                      style: TextStyle(
-                        color: colorScheme.onSurface,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                    ),
+                    Container(
+                      width: 200 + (100 * _breathingController.value),
+                      height: 200 + (100 * _breathingController.value),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            colorScheme.primary.withValues(alpha: 0.8),
+                            colorScheme.primary.withValues(alpha: 0.2),
+                            Colors.transparent,
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.primary.withValues(
+                              alpha: 0.4 * _breathingController.value,
+                            ),
+                            blurRadius: 50,
+                            spreadRadius: 20 * _breathingController.value,
+                          ),
+                        ],
                       ),
-                    ).animate(target: _isActive ? 1 : 0).fadeIn(),
-                  ),
+                      child: Center(
+                        child: Text(
+                          _phaseText,
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).animate(target: _isActive ? 1 : 0).fadeIn(),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

@@ -28,6 +28,15 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
   Timer? _timer;
 
   void _startExercise() {
+    // Vibrar al inicio de cada fase (no al reanudar de una pausa)
+    if (_secondsLeft == (_isResting ? _restTime : _exerciseTime)) {
+      if (_isResting) {
+        HapticService().restPhase();
+      } else {
+        HapticService().contractionPhase();
+      }
+    }
+
     setState(() {
       _isActive = true;
     });
@@ -44,7 +53,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
     _timer?.cancel();
     if (!_isResting) {
       if (_currentSet < _totalSets) {
-        HapticService().restPhase();
+        // El trigger de vibración ahora está dentro de _startExercise
         setState(() {
           _isResting = true;
           _secondsLeft = _restTime;
@@ -55,7 +64,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
         _showCompletionDialog();
       }
     } else {
-      HapticService().contractionPhase();
+      // El trigger de vibración ahora está dentro de _startExercise
       setState(() {
         _isResting = false;
         _currentSet++;
