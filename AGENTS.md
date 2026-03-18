@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Implementada vibración faltante en fase de inhalación (SPEC-008), corregida vibración isométrica (SPEC-009), actualizado pubspec.yaml (v1.6.6+10).
+*Última actualización: 2026-03-18 - Mejorada robustez de haptics en Isométricos (Vibration 3.1.8 + dual feedback), corregidas fases de vibración en Respiración (SPEC-008), actualizado pubspec.yaml (v1.6.7+11).

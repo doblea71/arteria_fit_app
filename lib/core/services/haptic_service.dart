@@ -24,28 +24,28 @@ class HapticService {
   /// Doble pulso para alertar el inicio de la fase de contracción
   Future<void> contractionPhase() async {
     try {
-      if (await Vibration.hasVibrator()) {
-        Vibration.vibrate(pattern: [0, 100, 50, 100]);
-      } else {
-        await HapticFeedback.heavyImpact();
-        await Future.delayed(const Duration(milliseconds: 50));
-        await HapticFeedback.heavyImpact();
+      // Intentamos ambos métodos para máxima compatibilidad
+      HapticFeedback.mediumImpact();
+      if (await Vibration.hasVibrator() == true) {
+        Vibration.vibrate(
+          pattern: [0, 100, 50, 100],
+          intensities: [128, 255],
+        );
       }
     } catch (e) {
-      await HapticFeedback.heavyImpact();
+      HapticFeedback.heavyImpact();
     }
   }
 
   /// Pulso suave para indicar el inicio del descanso
   Future<void> restPhase() async {
     try {
-      if (await Vibration.hasVibrator()) {
-        Vibration.vibrate(duration: 100, amplitude: 128);
-      } else {
-        await HapticFeedback.lightImpact();
+      HapticFeedback.lightImpact();
+      if (await Vibration.hasVibrator() == true) {
+        Vibration.vibrate(duration: 150, amplitude: 128);
       }
     } catch (e) {
-      await HapticFeedback.lightImpact();
+      HapticFeedback.lightImpact();
     }
   }
 }
