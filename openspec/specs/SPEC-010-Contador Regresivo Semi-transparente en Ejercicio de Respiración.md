@@ -1,6 +1,6 @@
 # SPEC-010 — Overlay de Cuenta Regresiva por Fase en breathing_screen.dart
 
-## Status: Proposed
+## Status: Implemented
 
 ## Context
 
