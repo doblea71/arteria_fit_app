@@ -12,77 +12,92 @@ class ActivityScreen extends ConsumerStatefulWidget {
   ConsumerState<ActivityScreen> createState() => _ActivityScreenState();
 }
 
-class _ActivityScreenState extends ConsumerState<ActivityScreen> {
-  List<Map<String, dynamic>> _logs = [];
+class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  List<Map<String, dynamic>> _exerciseLogs = [];
+  List<Map<String, dynamic>> _bpLogs = [];
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadLogs();
+    _tabController = TabController(length: 2, vsync: this);
+    _loadData();
   }
 
-  Future<void> _loadLogs() async {
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadData() async {
     final db = DatabaseService();
-    final logs = await db.getAllLogs();
-    setState(() {
-      _logs = logs;
-      _isLoading = false;
-    });
+    final exerciseLogs = await db.getAllLogs();
+    final bpLogs = await db.getBloodPressureReadings();
+    
+    if (mounted) {
+      setState(() {
+        _exerciseLogs = exerciseLogs;
+        _bpLogs = bpLogs;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+          icon: Icon(LucideIcons.chevronLeft, color: colorScheme.onSurface),
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'Actividad',
+          'Historial',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
+            color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              ref.read(themeModeProvider.notifier).toggleTheme();
-            },
-            icon: Icon(
-              isDark ? Icons.light_mode : Icons.dark_mode,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+            onPressed: () => ref.read(themeModeProvider.notifier).toggleTheme(),
+            icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
           ),
         ],
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
+        bottom: TabBar(
+          controller: _tabController,
+          labelColor: colorScheme.primary,
+          unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.5),
+          indicatorColor: colorScheme.primary,
+          tabs: const [
+            Tab(text: 'Ejercicios'),
+            Tab(text: 'Tensión'),
+          ],
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _logs.isEmpty
-              ? _buildEmptyState(context)
-              : RefreshIndicator(
-                  onRefresh: _loadLogs,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _logs.length,
-                    itemBuilder: (context, index) {
-                      return _buildExerciseItem(context, _logs[index]);
-                    },
-                  ),
-                ),
+          : TabBarView(
+              controller: _tabController,
+              children: [
+                _buildLogsList(_exerciseLogs, isExercise: true),
+                _buildLogsList(_bpLogs, isExercise: false),
+              ],
+            ),
+      floatingActionButton: _tabController.index == 1 ? FloatingActionButton.extended(
+        onPressed: () => context.push('/blood-pressure').then((_) => _loadData()),
+        label: const Text('Registrar'),
+        icon: const Icon(LucideIcons.plus),
+      ) : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: colorScheme.primary,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         onTap: (index) {
@@ -112,28 +127,40 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildLogsList(List<Map<String, dynamic>> logs, {required bool isExercise}) {
+    if (logs.isEmpty) {
+      return _buildEmptyState(context, isExercise);
+    }
+
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: logs.length,
+        itemBuilder: (context, index) {
+          return isExercise 
+            ? _buildExerciseItem(context, logs[index])
+            : _buildBPItem(context, logs[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, bool isExercise) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            LucideIcons.clipboardList,
+            isExercise ? LucideIcons.clipboardList : LucideIcons.heartPulse,
             size: 64,
             color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
-            'No hay ejercicios registrados',
+            isExercise ? 'No hay ejercicios registrados' : 'No hay tomas de tensión',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Completa tu primer ejercicio para ver tu historial',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
                 ),
           ),
         ],
@@ -155,56 +182,81 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: (isBreathing ? Colors.blueAccent : Colors.teal).withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            isBreathing ? LucideIcons.wind : LucideIcons.activity,
+            color: isBreathing ? Colors.blueAccent : Colors.teal,
+            size: 20,
+          ),
+        ),
+        title: Text(
+          isBreathing ? 'Respiración' : 'Isométricos',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(_formatDateTime(completedAt)),
+        trailing: Text(
+          durationText,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isBreathing ? Colors.blueAccent : Colors.teal,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBPItem(BuildContext context, Map<String, dynamic> log) {
+    final createdAt = DateTime.parse(log['created_at'] as String);
+    final sys = log['systolic'] as int;
+    final dia = log['diastolic'] as int;
+    final pulse = log['pulse'] as int;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.redAccent.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(LucideIcons.heartPulse, color: Colors.redAccent, size: 20),
+        ),
+        title: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: (isBreathing ? Colors.blueAccent : Colors.teal).withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+            Text('$sys', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const Text(' / ', style: TextStyle(color: Colors.grey)),
+            Text('$dia', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(width: 8),
+            const Text('mmHg', style: TextStyle(fontSize: 10, color: Colors.grey)),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(_formatDateTime(createdAt)),
+            if (log['note'] != null)
+              Text(
+                log['note'] as String,
+                style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
               ),
-              child: Icon(
-                isBreathing ? LucideIcons.wind : LucideIcons.activity,
-                color: isBreathing ? Colors.blueAccent : Colors.teal,
-              ),
+          ],
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              '$pulse',
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    isBreathing ? 'Respiración' : 'Isométricos',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatDateTime(completedAt),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  durationText,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: isBreathing ? Colors.blueAccent : Colors.teal,
-                  ),
-                ),
-              ],
-            ),
+            const Text('ppm', style: TextStyle(fontSize: 10, color: Colors.grey)),
           ],
         ),
       ),
@@ -222,6 +274,8 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
       datePrefix = 'Hoy, ';
     } else if (dateToCheck == yesterday) {
       datePrefix = 'Ayer, ';
+    } else {
+      datePrefix = '${dateTime.day}/${dateTime.month}, ';
     }
 
     final hour = dateTime.hour.toString().padLeft(2, '0');

@@ -11,3 +11,18 @@ SPEC-004 (SQLite / Seguimiento)
 SPEC-001 (Respiración final)          [independiente]
 SPEC-003 (Vibración)                  [independiente]
 SPEC-007 (Card Calabaza)              [independiente]
+
+---
+
+## Actualización del Mapa de Dependencias
+```
+
+SPEC-003 (HapticService — base)
+    └──> SPEC-008 (Vibración Respiración — corrección)
+    └──> SPEC-009 (Vibración Isométrico — nueva)
+
+SPEC-001 (Cierre grácil 4-7-8)
+    └──> SPEC-008 (no duplicar vibración en ciclo truncado)
+    └──> SPEC-010 (contador regresivo en Exhalar forzado)
+
+SPEC-010 (Contador regresivo)   [independiente salvo interacción con SPEC-001]

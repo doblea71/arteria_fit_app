@@ -5,6 +5,7 @@ import '../../features/isometrics/isometrics_screen.dart';
 import '../../features/nutrition/nutrition_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/activity/activity_screen.dart';
+import '../../features/activity/blood_pressure_entry_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -32,6 +33,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/activity',
       builder: (context, state) => const ActivityScreen(),
+    ),
+    GoRoute(
+      path: '/blood-pressure',
+      builder: (context, state) => const BloodPressureEntryScreen(),
     ),
   ],
 );

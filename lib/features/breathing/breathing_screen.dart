@@ -48,6 +48,10 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     });
     _runBreathingCycle();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_secondsLeft > 0) {
         setState(() => _secondsLeft--);
       } else {
@@ -58,30 +62,30 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   }
 
   void _runBreathingCycle() async {
-    if (!_isActive) return;
+    if (!_isActive || !mounted) return;
 
     setState(() => _currentPhase = BreathingPhase.inhale);
     _breathingController.duration = Duration(seconds: _inhaleSec);
     await _breathingController.forward();
 
-    if (!_isActive) return;
+    if (!_isActive || !mounted) return;
 
-    HapticService().phaseChange();
     setState(() => _currentPhase = BreathingPhase.hold);
+    HapticService().phaseChange();
     await Future.delayed(Duration(seconds: _holdSec));
 
-    if (!_isActive) return;
+    if (!_isActive || !mounted) return;
 
-    HapticService().phaseChange();
     setState(() => _currentPhase = BreathingPhase.exhale);
+    HapticService().phaseChange();
     _breathingController.duration = Duration(seconds: _exhaleSec);
     await _breathingController.reverse();
 
-    if (_isActive) _runBreathingCycle();
+    if (_isActive && mounted) _runBreathingCycle();
   }
 
   void _runFinalExhale() async {
-    if (!_isFinalCycle) return;
+    if (!_isFinalCycle || !mounted) return;
     
     setState(() => _currentPhase = BreathingPhase.exhale);
     _breathingController.duration = Duration(seconds: _exhaleSec);
@@ -89,6 +93,8 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     
     await Future.delayed(Duration(seconds: _exhaleSec));
     
+    if (!mounted) return;
+
     _timer?.cancel();
     _breathingController.stop();
     setState(() {
@@ -105,10 +111,12 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     if (_isFinalCycle) {
       _runFinalExhale();
     } else {
-      setState(() {
-        _isActive = false;
-        _currentPhase = BreathingPhase.resting;
-      });
+      if (mounted) {
+        setState(() {
+          _isActive = false;
+          _currentPhase = BreathingPhase.resting;
+        });
+      }
     }
   }
 

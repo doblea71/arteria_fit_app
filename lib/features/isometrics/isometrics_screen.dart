@@ -44,7 +44,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
     _timer?.cancel();
     if (!_isResting) {
       if (_currentSet < _totalSets) {
-        HapticService().phaseChange();
+        HapticService().restPhase();
         setState(() {
           _isResting = true;
           _secondsLeft = _restTime;
@@ -55,7 +55,7 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
         _showCompletionDialog();
       }
     } else {
-      HapticService().phaseChange();
+      HapticService().contractionPhase();
       setState(() {
         _isResting = false;
         _currentSet++;

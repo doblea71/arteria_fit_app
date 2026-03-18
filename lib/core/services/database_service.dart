@@ -21,8 +21,9 @@ class DatabaseService {
 
     return await openDatabase(
       dbFilePath,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -44,8 +45,34 @@ class DatabaseService {
       )
     ''');
 
+    await db.execute('''
+      CREATE TABLE blood_pressure_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        systolic INTEGER NOT NULL,
+        diastolic INTEGER NOT NULL,
+        pulse INTEGER NOT NULL,
+        created_at TEXT NOT NULL,
+        note TEXT
+      )
+    ''');
+
     await db.insert('daily_goals', {'exercise_type': 'breathing', 'goal': 3});
     await db.insert('daily_goals', {'exercise_type': 'isometric', 'goal': 2});
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+        CREATE TABLE blood_pressure_log (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          systolic INTEGER NOT NULL,
+          diastolic INTEGER NOT NULL,
+          pulse INTEGER NOT NULL,
+          created_at TEXT NOT NULL,
+          note TEXT
+        )
+      ''');
+    }
   }
 
   Future<int> insertExerciseLog({
@@ -60,6 +87,22 @@ class DatabaseService {
     });
   }
 
+  Future<int> insertBloodPressure({
+    required int systolic,
+    required int diastolic,
+    required int pulse,
+    String? note,
+  }) async {
+    final db = await database;
+    return await db.insert('blood_pressure_log', {
+      'systolic': systolic,
+      'diastolic': diastolic,
+      'pulse': pulse,
+      'created_at': DateTime.now().toIso8601String(),
+      'note': note,
+    });
+  }
+
   Future<List<Map<String, dynamic>>> getLogsToday() async {
     final db = await database;
     final now = DateTime.now();
@@ -71,6 +114,24 @@ class DatabaseService {
       where: 'completed_at BETWEEN ? AND ?',
       whereArgs: [startOfDay, endOfDay],
     );
+  }
+
+  Future<List<Map<String, dynamic>>> getBloodPressureReadings() async {
+    final db = await database;
+    return await db.query(
+      'blood_pressure_log',
+      orderBy: 'created_at DESC',
+    );
+  }
+
+  Future<Map<String, dynamic>?> getLastBloodPressureReading() async {
+    final db = await database;
+    final result = await db.query(
+      'blood_pressure_log',
+      orderBy: 'created_at DESC',
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
   }
 
   Future<int> getDailyGoal(String exerciseType) async {

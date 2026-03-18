@@ -1,6 +1,6 @@
 # SPEC-003 — Notificación Háptica (Vibración) en Cambios de Fase
 
-## Status: Implemented
+## Status: Implemented (updated with SPEC-008)
 
 ## Context
 

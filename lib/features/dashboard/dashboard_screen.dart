@@ -19,6 +19,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   int _breathingGoal = 3;
   int _isometricCompleted = 0;
   int _isometricGoal = 2;
+  Map<String, dynamic>? _lastReading;
   bool _isLoading = true;
 
   @override
@@ -48,6 +49,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final breathingGoal = await db.getDailyGoal('breathing');
     final isometricCompleted = await db.getCompletedTodayCount('isometric');
     final isometricGoal = await db.getDailyGoal('isometric');
+    final lastReading = await db.getLastBloodPressureReading();
 
     if (mounted) {
       setState(() {
@@ -55,6 +57,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         _breathingGoal = breathingGoal;
         _isometricCompleted = isometricCompleted;
         _isometricGoal = isometricGoal;
+        _lastReading = lastReading;
         _isLoading = false;
       });
     }
@@ -110,6 +113,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildProgressCard(context),
+                    const SizedBox(height: 24),
+                    _buildBloodPressureCard(context),
                     const SizedBox(height: 24),
                     Text(
                       'Ejercicios del día',
@@ -264,6 +269,139 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBloodPressureCard(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return GestureDetector(
+      onTap: () => context.push('/blood-pressure'),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(LucideIcons.heartPulse, color: Colors.redAccent, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'Presión Arterial',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
+                Text(
+                  _lastReading != null ? 'Última toma' : 'Sin registros',
+                  style: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (_lastReading != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _readingItem(
+                    context,
+                    value: '${_lastReading!['systolic']}',
+                    label: 'SYS',
+                    unit: 'mmHg',
+                  ),
+                  _readingItem(
+                    context,
+                    value: '${_lastReading!['diastolic']}',
+                    label: 'DIA',
+                    unit: 'mmHg',
+                  ),
+                  _readingItem(
+                    context,
+                    value: '${_lastReading!['pulse']}',
+                    label: 'Pulso',
+                    unit: 'ppm',
+                  ),
+                ],
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  'Registra tu tensión hoy',
+                  style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.w600),
+                ),
+              ),
+            const SizedBox(height: 12),
+            const Divider(),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(LucideIcons.plusCircle, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'Nuevo registro',
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _readingItem(BuildContext context, {required String value, required String label, required String unit}) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+          ),
+        ),
+        Text(
+          unit,
+          style: TextStyle(
+            fontSize: 10,
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+          ),
+        ),
+      ],
     );
   }
 

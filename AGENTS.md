@@ -130,11 +130,11 @@ MAJOR.MINOR.PATCH+BUILD
 
 Ejemplo: `1.2.26+1`
 
-| Segmento | Ejemplo | Significado |
-|----------|---------|-------------|
-| `MAJOR`  | `1`     | Versión principal |
-| `MINOR`  | `2`     | Funcionalidades |
-| `PATCH`  | `26`    | Correcciones |
+| Segmento | Ejemplo | Significado           |
+|----------|---------|-----------------------|
+| `MAJOR`  | `1`     | Versión principal     |
+| `MINOR`  | `2`     | Funcionalidades       |
+| `PATCH`  | `26`    | Correcciones          |
 | `BUILD`  | `+1`    | Número de compilación |
 
 ---
@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Añadida regla de versionado obligatoria para pubspec.yaml
+*Última actualización: 2026-03-18 - Solucionado error de versión mínima de Gradle (Actualizado a 8.13-bin), actualizado pubspec.yaml (v1.6.2+6).
