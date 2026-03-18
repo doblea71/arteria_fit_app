@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Corregida implementación de vibración en ejercicio isométrico (SPEC-009): añadido permiso en manifest, ajustados patrones y disparador inicial, actualizado pubspec.yaml (v1.6.5+9).
+*Última actualización: 2026-03-18 - Implementada vibración faltante en fase de inhalación (SPEC-008), corregida vibración isométrica (SPEC-009), actualizado pubspec.yaml (v1.6.6+10).

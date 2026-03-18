@@ -91,6 +91,7 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
     _cancelPhaseCountdown();
     setState(() => _currentPhase = BreathingPhase.inhale);
     _startPhaseCountdown(_inhaleSec);
+    HapticService().phaseChange();
     _breathingController.duration = Duration(seconds: _inhaleSec);
     await _breathingController.forward();
 
