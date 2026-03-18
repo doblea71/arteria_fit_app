@@ -116,6 +116,81 @@ Para evitar advertencias de depreciación (deprecation warnings) y seguir los es
 - **Colores:** NO usar `onBackground` ni `background`. Usar `onSurface` y `surface` respectivamente.
 - **Opacidad:** Preferir el uso de `color.withValues(alpha: 0.1)` en lugar de `color.withOpacity(0.1)` para manejar la transparencia de forma más moderna.
 
+## Regla de Versionado — Obligatoria en toda modificación
+
+Cada vez que realices **cualquier modificación** al proyecto, **debes actualizar la versión** en `pubspec.yaml` siguiendo estas reglas sin excepción.
+
 ---
 
-*Última actualización: 2026-03-17 - Añadida integración de Context7 (documentación actualizada para LLMs) con regla de activación automática.*
+### Formato de versión
+
+```text
+MAJOR.MINOR.PATCH+BUILD
+```
+
+Ejemplo: `1.2.26+1`
+
+| Segmento | Ejemplo | Significado |
+|----------|---------|-------------|
+| `MAJOR`  | `1`     | Versión principal |
+| `MINOR`  | `2`     | Funcionalidades |
+| `PATCH`  | `26`    | Correcciones |
+| `BUILD`  | `+1`    | Número de compilación |
+
+---
+
+### ¿Qué número aumentar?
+
+#### 🔴 Aumenta MAJOR cuando
+
+- Eliminas o renombras una función, clase, pantalla o endpoint existente
+- Cambias el comportamiento de algo que ya existía de forma incompatible
+- Reestructuras la arquitectura del proyecto de forma significativa
+
+> Al aumentar MAJOR → reinicia MINOR y PATCH a `0`
+> Ejemplo: `1.2.26` → `2.0.0`
+
+#### 🟡 Aumenta MINOR cuando
+
+- Agregas una nueva pantalla, función, widget o flujo
+- Añades una nueva dependencia o integración
+- Implementas una nueva funcionalidad sin romper las existentes
+
+> Al aumentar MINOR → reinicia PATCH a `0`
+> Ejemplo: `1.2.26` → `1.3.0`
+
+#### 🟢 Aumenta PATCH cuando
+
+- Corriges un bug o error
+- Haces un ajuste visual menor (color, tamaño, texto)
+- Refactorizas código sin cambiar comportamiento
+- Actualizas comentarios, documentación o archivos de configuración
+
+> Ejemplo: `1.2.26` → `1.2.27`
+
+#### 🔵 Aumenta BUILD siempre
+
+- El número después del `+` debe aumentar en **cada modificación**, independientemente del tipo de cambio.
+
+> Ejemplo: `1.2.26+1` → `1.2.26+2` (si solo sube el PATCH)
+> Ejemplo: `1.2.26+1` → `1.3.0+2` (si sube el MINOR)
+
+---
+
+### Dónde actualizar la versión
+
+El único lugar donde se define la versión es:
+
+```text
+pubspec.yaml
+```
+
+Línea a modificar:
+
+```yaml
+version: 1.2.26+1
+```
+
+---
+
+*Última actualización: 2026-03-18 - Añadida regla de versionado obligatoria para pubspec.yaml
