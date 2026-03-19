@@ -193,4 +193,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-18 - Mejorada robustez de haptics en Isométricos (Vibration 3.1.8 + dual feedback), corregidas fases de vibración en Respiración (SPEC-008), actualizado pubspec.yaml (v1.6.7+11).
+*Última actualización: 2026-03-19 - Corregido fallo en vibración de Isométricos donde la vibración solo se ejecutaba al inicio del ejercicio. Ahora se dispara en cada cambio de fase (contracción y descanso) automáticamente. Actualizado pubspec.yaml (v1.6.9+13).

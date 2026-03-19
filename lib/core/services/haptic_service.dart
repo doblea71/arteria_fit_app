@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
 
@@ -11,41 +12,66 @@ class HapticService {
   /// Vibración estándar para cambios de fase genéricos
   Future<void> phaseChange() async {
     try {
-      if (await Vibration.hasVibrator()) {
-        Vibration.vibrate(duration: 200);
-      } else {
-        await HapticFeedback.mediumImpact();
+      debugPrint('HapticService: Ejecutando phaseChange');
+      // Feedback táctil inmediato nativo
+      await HapticFeedback.mediumImpact();
+      
+      final hasVibrator = await Vibration.hasVibrator();
+      if (hasVibrator == true) {
+        await Vibration.vibrate(duration: 200);
       }
     } catch (e) {
-      // Silently fail if haptic feedback is not available
+      debugPrint('HapticService Error (phaseChange): $e');
+      // Fallback garantizado
+      await HapticFeedback.mediumImpact();
     }
   }
 
-  /// Doble pulso para alertar el inicio de la fase de contracción
+  /// Doble pulso fuerte para iniciar fase activa (contracción)
   Future<void> contractionPhase() async {
     try {
-      // Intentamos ambos métodos para máxima compatibilidad
-      HapticFeedback.mediumImpact();
-      if (await Vibration.hasVibrator() == true) {
-        Vibration.vibrate(
-          pattern: [0, 100, 50, 100],
-          intensities: [128, 255],
-        );
+      debugPrint('HapticService: Ejecutando contractionPhase (Buscando máximo feedback)');
+      
+      // Feedback nativo inmediato (funciona en casi todo iOS/Android)
+      await HapticFeedback.heavyImpact();
+      
+      final hasVibrator = await Vibration.hasVibrator();
+      if (hasVibrator == true) {
+        final hasCustomSupport = await Vibration.hasCustomVibrationsSupport();
+        
+        if (hasCustomSupport) {
+          debugPrint('HapticService: Usando patrón personalizado');
+          // Patrón: espera 0, vibra 250, espera 150, vibra 250
+          // Longitud pattern = 4, Longitud intensities = 4
+          await Vibration.vibrate(
+            pattern: [0, 250, 150, 250],
+            intensities: [0, 255, 0, 255], 
+          );
+        } else {
+          debugPrint('HapticService: No soporta patrones, usando vibración simple larga');
+          await Vibration.vibrate(duration: 600); // Corrected 'duversion' to 'duration'
+        }
       }
     } catch (e) {
-      HapticFeedback.heavyImpact();
+      debugPrint('HapticService Error (contractionPhase): $e');
+      await HapticFeedback.heavyImpact();
     }
   }
 
   /// Pulso suave para indicar el inicio del descanso
   Future<void> restPhase() async {
     try {
-      HapticFeedback.lightImpact();
-      if (await Vibration.hasVibrator() == true) {
-        Vibration.vibrate(duration: 150, amplitude: 128);
+      debugPrint('HapticService: Ejecutando restPhase');
+      await HapticFeedback.lightImpact();
+      
+      final hasVibrator = await Vibration.hasVibrator();
+      if (hasVibrator == true) {
+        // Vibración más larga pero suave (amplitud baja si se soporta)
+        await Vibration.vibrate(duration: 400, amplitude: 100);
       }
     } catch (e) {
-      HapticFeedback.lightImpact();
+      debugPrint('HapticService Error (restPhase): $e');
+      await HapticFeedback.lightImpact();
     }
   }
 }

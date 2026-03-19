@@ -27,16 +27,21 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
   bool _isActive = false;
   Timer? _timer;
 
-  void _startExercise() {
-    // Vibrar al inicio de cada fase (no al reanudar de una pausa)
-    if (_secondsLeft == (_isResting ? _restTime : _exerciseTime)) {
-      if (_isResting) {
-        HapticService().restPhase();
-      } else {
-        HapticService().contractionPhase();
-      }
+  void _triggerPhaseVibration() {
+    if (_isResting) {
+      HapticService().restPhase();
+    } else {
+      HapticService().contractionPhase();
+    }
+  }
+
+  void _startExercise({bool automaticTransition = false}) {
+    // Vibrar si es una transición automática, o si es el inicio manual (y el tiempo está completo)
+    if (automaticTransition || _secondsLeft == (_isResting ? _restTime : _exerciseTime)) {
+      _triggerPhaseVibration();
     }
 
+    _timer?.cancel(); 
     setState(() {
       _isActive = true;
     });
@@ -53,24 +58,22 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
     _timer?.cancel();
     if (!_isResting) {
       if (_currentSet < _totalSets) {
-        // El trigger de vibración ahora está dentro de _startExercise
         setState(() {
           _isResting = true;
           _secondsLeft = _restTime;
         });
-        _startExercise();
+        _startExercise(automaticTransition: true);
       } else {
         _registerExercise();
         _showCompletionDialog();
       }
     } else {
-      // El trigger de vibración ahora está dentro de _startExercise
       setState(() {
         _isResting = false;
         _currentSet++;
         _secondsLeft = _exerciseTime;
       });
-      _startExercise();
+      _startExercise(automaticTransition: true);
     }
   }
 
