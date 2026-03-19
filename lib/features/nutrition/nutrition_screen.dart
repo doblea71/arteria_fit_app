@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../shared/models/nutrition_data.dart';
 
@@ -15,6 +16,11 @@ class NutritionScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/recipes'),
+        icon: const Icon(LucideIcons.bookOpen),
+        label: const Text('Recetas'),
+      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

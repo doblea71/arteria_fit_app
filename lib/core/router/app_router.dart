@@ -6,6 +6,7 @@ import '../../features/nutrition/nutrition_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/activity/activity_screen.dart';
 import '../../features/activity/blood_pressure_entry_screen.dart';
+import '../../screens/recipes_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -37,6 +38,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/blood-pressure',
       builder: (context, state) => const BloodPressureEntryScreen(),
+    ),
+    GoRoute(
+      path: '/recipes',
+      builder: (context, state) => const RecipesScreen(),
     ),
   ],
 );
