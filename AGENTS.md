@@ -122,6 +122,17 @@ Cada vez que realices **cualquier modificación** al proyecto, **debes actualiza
 
 ---
 
+## Comandos de Gestión
+
+- **`/estado`** → Resumen de progreso general
+- **`/siguiente`** → siguiente tarea prioritaria
+- **`/pendientes`** → lista completa de tareas
+- **`/bloqueadores`** → problemas actuales
+- **`/roadmap`** → planificación a futuro
+- **`/commit`** → crear commit en español
+
+---
+
 ### Formato de versión
 
 ```text
