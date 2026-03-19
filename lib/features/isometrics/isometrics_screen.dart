@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/providers/exercise_provider.dart';
 import '../../core/services/database_service.dart';
@@ -16,7 +17,8 @@ class IsometricsScreen extends ConsumerStatefulWidget {
   ConsumerState<IsometricsScreen> createState() => _IsometricsScreenState();
 }
 
-class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
+class _IsometricsScreenState extends ConsumerState<IsometricsScreen>
+    with WidgetsBindingObserver {
   int _currentSet = 1;
   static const int _totalSets = 4;
   static const int _exerciseTime = 120;
@@ -27,6 +29,21 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
   bool _isActive = false;
   Timer? _timer;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      WakelockPlus.disable();
+    } else if (state == AppLifecycleState.resumed && _isActive) {
+      WakelockPlus.enable();
+    }
+  }
+
   void _triggerPhaseVibration() {
     if (_isResting) {
       HapticService().restPhase();
@@ -36,6 +53,10 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
   }
 
   void _startExercise({bool automaticTransition = false}) {
+    if (!_isActive) {
+      WakelockPlus.enable();
+    }
+    
     // Vibrar si es una transición automática, o si es el inicio manual (y el tiempo está completo)
     if (automaticTransition || _secondsLeft == (_isResting ? _restTime : _exerciseTime)) {
       _triggerPhaseVibration();
@@ -80,9 +101,11 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
   void _pauseExercise() {
     _timer?.cancel();
     setState(() => _isActive = false);
+    WakelockPlus.disable();
   }
 
   Future<void> _registerExercise() async {
+    WakelockPlus.disable();
     final db = DatabaseService();
     await db.insertExerciseLog(
       exerciseType: 'isometric',
@@ -121,6 +144,8 @@ class _IsometricsScreenState extends ConsumerState<IsometricsScreen> {
 
   @override
   void dispose() {
+    WakelockPlus.disable();
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     super.dispose();
   }

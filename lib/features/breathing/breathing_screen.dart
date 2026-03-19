@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/providers/exercise_provider.dart';
 import '../../core/services/database_service.dart';
@@ -19,7 +20,7 @@ class BreathingScreen extends ConsumerStatefulWidget {
 }
 
 class _BreathingScreenState extends ConsumerState<BreathingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _breathingController;
   BreathingPhase _currentPhase = BreathingPhase.resting;
   int _secondsLeft = 300;
@@ -36,13 +37,24 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _breathingController = AnimationController(
       vsync: this,
       duration: Duration(seconds: _inhaleSec),
     );
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      WakelockPlus.disable();
+    } else if (state == AppLifecycleState.resumed && _isActive) {
+      WakelockPlus.enable();
+    }
+  }
+
   void _startSession() {
+    WakelockPlus.enable();
     setState(() {
       _isActive = true;
       _secondsLeft = 300;
@@ -139,6 +151,7 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
   }
 
   void _stopSession() {
+    WakelockPlus.disable();
     _timer?.cancel();
     _breathingController.stop();
     
@@ -184,6 +197,8 @@ class _BreathingScreenState extends ConsumerState<BreathingScreen>
 
   @override
   void dispose() {
+    WakelockPlus.disable();
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _phaseCountdownTimer?.cancel();
     _breathingController.dispose();
