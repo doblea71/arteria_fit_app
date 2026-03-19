@@ -1,0 +1,453 @@
+{
+  "recetas": [
+    {
+      "id": "recipe_001",
+      "food_category": "platano",
+      "name": "Panqueques de Plátano y Avena",
+      "description": "Desayuno esponjoso y naturalmente dulce, perfecto para empezar el día con energía y potasio.",
+      "icon": "🥞",
+      "ingredientes": [
+        "2 plátanos muy maduros",
+        "2 huevos",
+        "50 g de copos de avena",
+        "1/2 cucharadita de canela",
+        "Aceite de coco para engrasar"
+      ],
+      "modo_preparacion": [
+        "En un bol, machaca los plátanos con un tenedor hasta obtener un puré.",
+        "Añade los huevos y la canela, y mezcla bien.",
+        "Incorpora la avena y remueve hasta que esté todo integrado.",
+        "Calienta una sartén antiadherente con unas gotas de aceite de coco.",
+        "Vierte pequeñas porciones de la masa y cocina a fuego medio hasta que aparezcan burbujas, luego voltea y dora por el otro lado."
+      ]
+    },
+    {
+      "id": "recipe_002",
+      "food_category": "platano",
+      "name": "Helado Cremoso de Plátano (Nice Cream)",
+      "description": "Postre saludable de un solo ingrediente, ideal para antojos dulces sin culpa.",
+      "icon": "🍦",
+      "ingredientes": [
+        "4 plátanos maduros",
+        "Opcional: 1 cucharada de cacao puro o esencia de vainilla"
+      ],
+      "modo_preparacion": [
+        "Pela los plátanos, córtalos en rodajas y congélalos en una bolsa hermética durante al menos 4 horas.",
+        "Saca las rodajas congeladas y tritúralas en una picadora o procesador de alimentos.",
+        "Procesa hasta obtener una textura cremosa y suave, similar a un helado. Para ayudar, para cada cierto tiempo para bajar la mezcla de los bordes.",
+        "Si deseas, añade cacao o vainilla al final y mezcla. Sirve inmediatamente."
+      ]
+    },
+    {
+      "id": "recipe_003",
+      "food_category": "platano",
+      "name": "Plátanos Asados con Canela (Air Fryer)",
+      "description": "Postre o cena ligera y reconfortante, lista en minutos.",
+      "icon": "🍌",
+      "ingredientes": [
+        "2 plátanos (no muy maduros para que mantengan la forma)",
+        "1 cucharada de aceite de oliva",
+        "Canela molida al gusto",
+        "Opcional: Semillas de sésamo"
+      ],
+      "modo_preparacion": [
+        "Precalienta la air fryer a 180°C.",
+        "Pela los plátanos y córtalos a lo largo en dos mitades o en rodajas gruesas.",
+        "Rocía con el aceite de oliva y espolvorea con canela.",
+        "Coloca los plátanos en la cesta de la air fryer y cocina durante 6-8 minutos, hasta que estén dorados y caramelizados.",
+        "Opcional: espolvorea con semillas de sésamo antes de servir."
+      ]
+    },
+    {
+      "id": "recipe_004",
+      "food_category": "espinacas",
+      "name": "Salteado de Espinacas con Ajo",
+      "description": "Guarnición rápida y sabrosa que conserva todo el sabor de la espinaca.",
+      "icon": "🧄",
+      "ingredientes": [
+        "400 g de espinacas frescas",
+        "2 dientes de ajo laminados",
+        "2 cucharadas de aceite de oliva virgen extra",
+        "Una pizca de sal y pimienta",
+        "Opcional: Un chorrito de vinagre de Jerez"
+      ],
+      "modo_preparacion": [
+        "Lava bien las espinacas y escúrrelas. No es necesario secarlas por completo.",
+        "Calienta el aceite en una sartén grande a fuego medio y añade los ajos laminados. Sofríe hasta que estén dorados, sin que se quemen.",
+        "Añade las espinacas por tandas, removiendo con una cuchara de madera. Verás que su volumen se reduce rápidamente.",
+        "Sazona con sal y pimienta, y saltea durante 2-3 minutos hasta que estén tiernas.",
+        "Si lo deseas, añade el vinagre justo antes de retirar del fuego y mezcla bien."
+      ]
+    },
+    {
+      "id": "recipe_005",
+      "food_category": "espinacas",
+      "name": "Smoothie Verde Energético",
+      "description": "Batido refrescante y nutritivo para un desayuno o merienda lleno de potasio.",
+      "icon": "🥤",
+      "ingredientes": [
+        "2 puñados grandes de espinacas frescas",
+        "1 plátano congelado",
+        "1/2 manzana verde",
+        "200 ml de bebida de almendras o agua de coco",
+        "Jugo de 1/2 limón"
+      ],
+      "modo_preparacion": [
+        "Coloca todos los ingredientes en el vaso de la batidora.",
+        "Comienza a batir a velocidad baja y ve aumentando hasta que la mezcla esté completamente homogénea y cremosa.",
+        "Prueba y ajusta el líquido si lo prefieres más ligero.",
+        "Sirve inmediatamente en un vaso."
+      ]
+    },
+    {
+      "id": "recipe_006",
+      "food_category": "espinacas",
+      "name": "Ensalada de Espinacas, Fresas y Nueces",
+      "description": "Ensalada fresca y equilibrada, llena de color y sabor.",
+      "icon": "🥗",
+      "ingredientes": [
+        "100 g de espinacas baby",
+        "150 g de fresas, lavadas y cortadas",
+        "30 g de nueces",
+        "Queso feta (opcional)",
+        "Vinagreta: 3 cdas de aceite de oliva, 1 cdta de vinagre balsámico, sal y pimienta"
+      ],
+      "modo_preparacion": [
+        "Lava y seca bien las espinacas y colócalas en una ensaladera.",
+        "Añade las fresas laminadas y las nueces troceadas.",
+        "Si usas queso feta, desmígalo por encima.",
+        "Prepara la vinagreta mezclando todos los ingredientes en un pequeño bol o agitándolos en un frasco.",
+        "Aliña la ensalada justo en el momento de servir para que no se ablande."
+      ]
+    },
+    {
+      "id": "recipe_007",
+      "food_category": "aguacate",
+      "name": "Tostada de Aguacate (Avocado Toast) Clásica",
+      "description": "Clásico mundial por su sencillez y poder nutritivo, rico en grasas saludables y potasio.",
+      "icon": "🥑",
+      "ingredientes": [
+        "1/2 aguacate hass maduro",
+        "1 rebanada de pan de masa madre o integral",
+        "Zumo de 1/2 lima o limón",
+        "Escamas de sal y pimienta negra",
+        "Opcional: Semillas de sésamo o chile en hojuelas"
+      ],
+      "modo_preparacion": [
+        "Tuesta la rebanada de pan hasta que esté dorada y crujiente.",
+        "Mientras tanto, corta el aguacate por la mitad, retira el hueso y la piel. Coloca la pulpa en un plato y machácala ligeramente con un tenedor (puedes dejarla con trozos o hacer un puré).",
+        "Rocía el aguacate con el zumo de lima para que no se oxide y añade una pizca de sal.",
+        "Unta el aguacate sobre la tostada caliente.",
+        "Espolvorea con pimienta negra recién molida y los toppings que desees."
+      ]
+    },
+    {
+      "id": "recipe_008",
+      "food_category": "aguacate",
+      "name": "Guacamole Tradicional",
+      "description": "El dip mexicano por excelencia, perfecto para acompañar con totopos de maíz o verduras.",
+      "icon": "🥑",
+      "ingredientes": [
+        "2 aguacates maduros",
+        "1/4 de cebolla morada pequeña, finamente picada",
+        "1 tomate mediano, sin semillas y picado",
+        "Zumo de 1 lima",
+        "Un puñado de cilantro fresco picado",
+        "Sal al gusto",
+        "Opcional: 1 jalapeño o chile serrano picado"
+      ],
+      "modo_preparacion": [
+        "Corta los aguacates por la mitad, quita el hueso y saca la pulpa con una cuchara.",
+        "En un bol, machaca el aguacate con un tenedor hasta obtener la textura deseada (con trozos o cremosa).",
+        "Añade la cebolla, el tomate, el cilantro, el chile (si se usa) y la sal.",
+        "Vierte el zumo de lima por encima y mezcla bien todos los ingredientes.",
+        "Sirve inmediatamente. Para conservarlo, pon el hueso dentro y cúbrelo con film transparente en contacto con la superficie."
+      ]
+    },
+    {
+      "id": "recipe_009",
+      "food_category": "aguacate",
+      "name": "Ensalada de Aguacate y Mango",
+      "description": "Ensalada refrescante y exótica que combina la cremosidad del aguacate con la dulzura del mango.",
+      "icon": "🥭",
+      "ingredientes": [
+        "1 aguacate en cubos",
+        "1 mango en cubos",
+        "1/2 pepino en cubos",
+        "Hojas de lechuga variada o rúcula",
+        "Cebolla morada en juliana fina",
+        "Aliño: 2 cdas de aceite de oliva, 1 cdta de vinagre de arroz o zumo de lima, sal y un toque de miel"
+      ],
+      "modo_preparacion": [
+        "Lava y seca las hojas verdes y colócalas como base en una fuente.",
+        "En un bol, mezcla suavemente los cubos de aguacate, mango y pepino con la cebolla morada.",
+        "Prepara el aliño batiendo todos los ingredientes hasta que emulsionen ligeramente.",
+        "Vierte el aliño sobre la mezcla de aguacate y mango y remueve con cuidado.",
+        "Dispón la mezcla sobre la cama de hojas verdes y sirve de inmediato."
+      ]
+    },
+    {
+      "id": "recipe_010",
+      "food_category": "almendras",
+      "name": "Leche de Almendras Casera",
+      "description": "Bebida vegetal cremosa y sin aditivos, perfecta para aprovechar el magnesio de las almendras.",
+      "icon": "🥛",
+      "ingredientes": [
+        "1 taza de almendras crudas (150 g)",
+        "4 tazas de agua filtrada (1 litro)",
+        "Opcional: 1 dátil sin hueso para endulzar, una pizca de canela"
+      ],
+      "modo_preparacion": [
+        "Remoja las almendras en agua durante toda la noche (mínimo 8 horas).",
+        "Al día siguiente, escúrrelas y desecha el agua del remojo.",
+        "Coloca las almendras hidratadas en una licuadora con las 4 tazas de agua fresca y el dátil (si se usa).",
+        "Licúa a máxima potencia durante 2-3 minutos, hasta que esté bien molido.",
+        "Cuela la mezcla usando una bolsa para leches vegetales, un colador de tela fina o un colador metálico con gasa.",
+        "Presiona bien para extraer todo el líquido. La pulpa sobrante se puede usar en otras recetas.",
+        "Guarda la leche en un recipiente de vidrio en la nevera y consume en 3-4 días."
+      ]
+    },
+    {
+      "id": "recipe_011",
+      "food_category": "almendras",
+      "name": "Ensalada con Almendras Tostadas y Manzana",
+      "description": "Ensalada crujiente y fresca, donde las almendras aportan el toque final perfecto.",
+      "icon": "🥗",
+      "ingredientes": [
+        "Mezcla de lechugas o canónigos",
+        "1 manzana cortada en finas láminas",
+        "50 g de almendras laminadas o fileteadas",
+        "Queso de cabra (opcional)",
+        "Vinagreta de mostaza y miel"
+      ],
+      "modo_preparacion": [
+        "En una sartén pequeña sin aceite, tuesta las almendras laminadas a fuego medio-bajo hasta que estén ligeramente doradas. Vigila que no se quemen. Reserva.",
+        "Lava y seca las hojas verdes y colócalas en una ensaladera.",
+        "Añade las láminas de manzana y el queso de cabra desmenuzado.",
+        "Prepara la vinagreta mezclando 3 cdas de aceite de oliva, 1 cdta de mostaza, 1 cdta de miel, sal y pimienta.",
+        "Aliña la ensalada, espolvorea con las almendras tostadas justo antes de servir para que mantengan su crunch."
+      ]
+    },
+    {
+      "id": "recipe_012",
+      "food_category": "almendras",
+      "name": "Pollo con Costra de Almendras",
+      "description": "Plato principal jugoso y con una textura sorprendente gracias a la cobertura crujiente de almendras.",
+      "icon": "🍗",
+      "ingredientes": [
+        "2 pechugas de pollo fileteadas",
+        "100 g de almendras crudas",
+        "50 g de pan rallado",
+        "1 huevo batido",
+        "Sal, pimienta y perejil seco",
+        "Aceite de oliva"
+      ],
+      "modo_preparacion": [
+        "Precalienta el horno a 200°C.",
+        "Tritura las almendras en un procesador de alimentos hasta que queden como un granulado grueso (no las conviertas en harina).",
+        "Mezcla las almendras molidas con el pan rallado, sal, pimienta y perejil en un plato hondo.",
+        "Sazona los filetes de pollo con sal y pimienta. Pásalos primero por huevo batido y luego por la mezcla de almendras y pan, presionando bien para que se adhiera.",
+        "Coloca los filetes en una bandeja de horno ligeramente engrasada o con papel vegetal.",
+        "Rocía un poco de aceite de oliva por encima del pollo.",
+        "Hornea durante 15-20 minutos, hasta que el pollo esté cocido y la costra esté dorada y crujiente."
+      ]
+    },
+    {
+      "id": "recipe_013",
+      "food_category": "chocolate_negro",
+      "name": "Cacao en Caliente (Chocolate a la Taza) Saludable",
+      "description": "Bebida reconfortante, rica en magnesio y antioxidantes, endulzada de forma natural.",
+      "icon": "☕",
+      "ingredientes": [
+        "500 ml de leche (vaca, almendras o avena)",
+        "50 g de chocolate negro (mínimo 85% cacao)",
+        "1 cucharada de cacao puro en polvo (opcional, para más sabor)",
+        "1 cucharadita de esencia de vainilla",
+        "Endulzante al gusto (dátil, panela, o 1 cucharadita de azúcar de coco)"
+      ],
+      "modo_preparacion": [
+        "Calienta la leche en un cazo a fuego medio.",
+        "Mientras tanto, pica el chocolate negro en trozos pequeños para que se derrita más fácilmente.",
+        "Cuando la leche esté caliente (sin hervir), añade el chocolate picado, el cacao en polvo (si se usa) y la vainilla.",
+        "Remueve constantemente con unas varillas hasta que el chocolate se haya derretido por completo y la mezcla esté homogénea.",
+        "Añade el endulzante elegido y remueve hasta que se disuelva. Sirve caliente."
+      ]
+    },
+    {
+      "id": "recipe_014",
+      "food_category": "chocolate_negro",
+      "name": "Mousse de Chocolate Negro (2 Ingredientes)",
+      "description": "Postre increíblemente fácil, ligero y esponjoso, que parece un capricho pero es muy saludable.",
+      "icon": "🍮",
+      "ingredientes": [
+        "200 g de chocolate negro (mínimo 85% cacao)",
+        "4 claras de huevo (o el líquido de 1 lata de garbanzos, aquafaba, para versión vegana)",
+        "Opcional: Una pizca de sal"
+      ],
+      "modo_preparacion": [
+        "Derrite el chocolate negro al baño maría o en el microondas en intervalos cortos. Deja que se enfríe un poco.",
+        "En un bol grande y limpio, monta las claras de huevo a punto de nieve con una pizca de sal (deben quedar bien firmes).",
+        "Con movimientos envolventes y suaves, añade el chocolate derretido a las claras montadas. Hazlo en varias tandas, mezclando con una espátula de goma para que las claras no se bajen.",
+        "Una vez que esté todo integrado, reparte la mousse en copas o recipientes individuales.",
+        "Refrigera durante al menos 2-3 horas para que adquiera consistencia. Sirve frío."
+      ]
+    },
+    {
+      "id": "recipe_015",
+      "food_category": "chocolate_negro",
+      "name": "Peras Asadas con Chocolate Negro",
+      "description": "Postre elegante y sencillo, donde el dulzor natural de la pera combina a la perfección con el intenso sabor del chocolate.",
+      "icon": "🍐",
+      "ingredientes": [
+        "2 peras conferencia o abate, maduras pero firmes",
+        "50 g de chocolate negro",
+        "Canela molida",
+        "Opcional: Nueces picadas para decorar"
+      ],
+      "modo_preparacion": [
+        "Precalienta el horno a 180°C.",
+        "Pela las peras, córtalas por la mitad a lo largo y retira las semillas con una cuchara pequeña.",
+        "Coloca las mitades de pera en una fuente para horno, con la parte del corte hacia arriba. Espolvoréalas con canela.",
+        "Hornea durante 20-25 minutos, hasta que estén tiernas (pínchalas con un cuchillo para comprobarlo).",
+        "Mientras se hornean, pica el chocolate. Cuando las peras estén listas y aún calientes, introduce trocitos de chocolate en el hueco central.",
+        "Deja reposar un par de minutos para que el chocolate se derrita con el calor residual. Sirve caliente, decorado con nueces si se desea."
+      ]
+    },
+    {
+      "id": "recipe_016",
+      "food_category": "remolacha",
+      "name": "Ensalada de Remolacha Asada con Queso de Cabra",
+      "description": "Combinación clásica y ganadora, donde el sabor dulce de la remolacha asada realza la cremosidad del queso.",
+      "icon": "🥗",
+      "ingredientes": [
+        "3 remolachas medianas",
+        "100 g de queso de cabra en rulo",
+        "Mezcla de rúcula y canónigos",
+        "Un puñado de nueces",
+        "Vinagreta: 3 cdas de aceite de oliva, 1 cdta de vinagre balsámico, sal y pimienta"
+      ],
+      "modo_preparacion": [
+        "Precalienta el horno a 200°C.",
+        "Lava bien las remolachas, envuélvelas individualmente en papel de aluminio y hornéalas durante 45-60 minutos, hasta que puedas pincharlas fácilmente con un cuchillo.",
+        "Deja que se enfríen un poco, luego pélalas (la piel se deslizará fácilmente) y córtalas en gajos o cubos.",
+        "Lava y seca las hojas verdes y colócalas en una fuente.",
+        "Dispón encima los trozos de remolacha, el queso de cabra desmenuzado y las nueces.",
+        "Prepara la vinagreta y aliña justo antes de servir."
+      ]
+    },
+    {
+      "id": "recipe_017",
+      "food_category": "remolacha",
+      "name": "Hummus de Remolacha",
+      "description": "Versión colorida y vibrante del hummus clásico, ideal para dipear con crudités o pan de pita.",
+      "icon": "🫙",
+      "ingredientes": [
+        "1 remolacha cocida (asada o hervida)",
+        "400 g de garbanzos cocidos (1 bote escurrido)",
+        "2 cucharadas de tahini (pasta de sésamo)",
+        "Zumo de 1 limón",
+        "1 diente de ajo pequeño",
+        "3 cucharadas de aceite de oliva virgen extra",
+        "Sal y comino al gusto"
+      ],
+      "modo_preparacion": [
+        "Pela la remolacha cocida y córtala en trozos.",
+        "Escurre y lava los garbanzos.",
+        "Coloca todos los ingredientes (remolacha, garbanzos, tahini, zumo de limón, ajo, aceite, sal y comino) en el vaso de una batidora o procesador de alimentos.",
+        "Tritura hasta obtener una pasta homogénea y cremosa. Si está demasiado espeso, puedes añadir un par de cucharadas de agua fría o del líquido de cocción de los garbanzos.",
+        "Prueba y ajusta de sal o limón si es necesario. Sirve con un chorrito de aceite por encima."
+      ]
+    },
+    {
+      "id": "recipe_018",
+      "food_category": "remolacha",
+      "name": "Jugo de Remolacha, Zanahoria y Manzana",
+      "description": "Bebida energizante y llena de nutrientes, perfecta para tomar a media mañana y aprovechar los nitratos de la remolacha.",
+      "icon": "🧃",
+      "ingredientes": [
+        "1 remolacha mediana, pelada",
+        "2 zanahorias, peladas",
+        "1 manzana roja",
+        "Un trozo pequeño de jengibre fresco (opcional)"
+      ],
+      "modo_preparacion": [
+        "Lava, pela y corta todos los ingredientes en trozos que quepan en la boca del extractor o licuadora.",
+        "Si usas un extractor de zumo (lento o centrífugo), pásalos uno por uno y recoge el jugo.",
+        "Si usas una licuadora convencional, trocea muy bien los ingredientes, añade un poco de agua y licúa a máxima potencia hasta que esté muy fino. Luego, cuela el resultado con un colador fino o una bolsa de tela para obtener el jugo.",
+        "Remueve bien y sirve inmediatamente para aprovechar al máximo sus propiedades."
+      ]
+    },
+    {
+      "id": "recipe_019",
+      "food_category": "semillas_calabaza",
+      "name": "Pesto de Semillas de Calabaza",
+      "description": "Alternativa al pesto tradicional, igual de sabrosa y mucho más económica, ideal para pastas o tostas.",
+      "icon": "🌿",
+      "ingredientes": [
+        "50 g de semillas de calabaza peladas (crudas o tostadas)",
+        "Un manojo grande de albahaca fresca (solo las hojas)",
+        "1 diente de ajo pequeño",
+        "50 g de queso parmesano rallado (o levadura nutricional para vegano)",
+        "Aceite de oliva virgen extra (aprox. 100 ml)",
+        "Zumo de 1/2 limón",
+        "Sal y pimienta al gusto"
+      ],
+      "modo_preparacion": [
+        "En una sartén sin aceite, tuesta ligeramente las semillas de calabaza a fuego medio hasta que empiecen a saltar. Reserva y deja enfriar.",
+        "En el vaso de una batidora o mortero, coloca las semillas tostadas, la albahaca, el ajo y el queso.",
+        "Tritura mientras añades el aceite de oliva en forma de hilo hasta obtener la textura deseada (más fina o más rústica).",
+        "Añade el zumo de limón, sal y pimienta, y mezcla de nuevo.",
+        "Prueba y ajusta. Consérvalo en un tarro de cristal cubierto con una capa de aceite en la nevera."
+      ]
+    },
+    {
+      "id": "recipe_020",
+      "food_category": "semillas_calabaza",
+      "name": "Granola Casera Crujiente",
+      "description": "Desayuno o snack crujiente, lleno de fibra, magnesio y grasas saludables, fácil de personalizar.",
+      "icon": "🥣",
+      "ingredientes": [
+        "200 g de copos de avena",
+        "50 g de semillas de calabaza",
+        "50 g de almendras picadas",
+        "50 g de pipas de girasol",
+        "2 cucharadas de aceite de coco",
+        "3 cucharadas de sirope de arce o miel",
+        "1 cucharadita de canela",
+        "Opcional: 50 g de arándanos secos (añadir al final)"
+      ],
+      "modo_preparacion": [
+        "Precalienta el horno a 160°C y forra una bandeja con papel vegetal.",
+        "En un bol grande, mezcla la avena, las semillas de calabaza, las almendras y las pipas de girasol.",
+        "En un cazo pequeño, derrite el aceite de coco y mézclalo con el sirope de arce y la canela.",
+        "Vierte la mezcla líquida sobre los ingredientes secos y remueve bien hasta que todo esté impregnado.",
+        "Extiende la mezcla sobre la bandeja en una capa uniforme.",
+        "Hornea durante 20-25 minutos, removiendo a mitad de cocción para que se dore de manera homogénea. Vigila que no se queme.",
+        "Deja enfriar completamente sobre la bandeja (se volverá crujiente al enfriarse). Si añades fruta deshidratada, hazlo ahora. Guarda en un tarro hermético."
+      ]
+    },
+    {
+      "id": "recipe_021",
+      "food_category": "semillas_calabaza",
+      "name": "Bolitas Energéticas de Datíl y Semillas",
+      "description": "Snack sin horno, ideal para llevar y combatir el antojo de media tarde de forma saludable.",
+      "icon": "🍬",
+      "ingredientes": [
+        "100 g de dátiles Medjool sin hueso",
+        "50 g de semillas de calabaza",
+        "50 g de almendras o nueces",
+        "1 cucharada de cacao puro en polvo",
+        "1 cucharadita de extracto de vainilla",
+        "Una pizca de sal",
+        "Coco rallado para rebozar (opcional)"
+      ],
+      "modo_preparacion": [
+        "Coloca las semillas de calabaza y las almendras en un procesador de alimentos y tritura hasta obtener un granulado no muy fino.",
+        "Añade los dátiles, el cacao, la vainilla y la sal. Procesa hasta que la mezcla comience a unirse y formar una masa pegajosa. Si está muy seca, añade una cucharadita de agua.",
+        "Toma pequeñas porciones de la masa y forma bolitas con las manos.",
+        "Opcional: pasa las bolitas por coco rallado para decorar.",
+        "Colócalas en una bandeja y refrigera durante al menos 30 minutos para que endurezcan. Consérvalas en la nevera."
+      ]
+    }
+  ]
+}
