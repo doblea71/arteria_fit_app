@@ -41,12 +41,23 @@ class NutritionScreen extends ConsumerWidget {
               const SizedBox(width: 8),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'Nutrición Cardíaca',
-                style: TextStyle(
-                  color: theme.colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/logo/arteria-fit.png',
+                    height: 28,
+                    width: 28,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Nutrición Cardíaca',
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               centerTitle: false,
               titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
