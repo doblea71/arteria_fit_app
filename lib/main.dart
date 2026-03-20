@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/theme_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
   runApp(
     const ProviderScope(
       child: ArteriaFitApp(),
@@ -30,6 +33,7 @@ class _ArteriaFitAppState extends ConsumerState<ArteriaFitApp> {
 
   Future<void> _initializeTheme() async {
     await ref.read(themeModeProvider.notifier).loadTheme();
+    FlutterNativeSplash.remove();
     if (mounted) {
       setState(() {
         _isInitialized = true;

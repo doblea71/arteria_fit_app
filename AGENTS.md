@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-19 - Corregido fallo en vibración de Isométricos donde la vibración solo se ejecutaba al inicio del ejercicio. Ahora se dispara en cada cambio de fase (contracción y descanso) automáticamente. Actualizado pubspec.yaml (v1.6.9+13).
+*Última actualización: 2026-03-19 - Implementado icono de launcher personalizado y splash screen nativo con soporte Light/Dark mode. Generados iconos adaptativos para Android e iOS. Actualizado pubspec.yaml (v1.7.1+15).

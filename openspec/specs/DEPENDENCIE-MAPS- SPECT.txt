@@ -26,3 +26,26 @@ SPEC-001 (Cierre grácil 4-7-8)
     └──> SPEC-010 (contador regresivo en Exhalar forzado)
 
 SPEC-010 (Contador regresivo)   [independiente salvo interacción con SPEC-001]
+
+---
+
+## Actualización del Mapa de Dependencias Global
+```
+SPEC-002 (Tema — base visual)
+    └──> SPEC-006  (Contraste cards)
+    └──> SPEC-012  (RecipesScreen respeta tema)
+
+SPEC-003 (HapticService — base háptica)
+    └──> SPEC-008  (Vibración respiración)
+    └──> SPEC-009  (Vibración isométrico)
+
+SPEC-001 (Cierre grácil 4-7-8)
+    └──> SPEC-008  (no duplicar vibración en ciclo truncado)
+    └──> SPEC-010  (contador regresivo en Exhalar forzado)
+
+SPEC-004 (SQLite)
+    └──> SPEC-005  (Pantalla Actividad)
+
+SPEC-011  ← independiente, bajo riesgo
+SPEC-010  ← independiente salvo interacción con SPEC-001
+SPEC-007  ← independiente, cambio de contenido puro
