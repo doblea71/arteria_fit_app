@@ -226,6 +226,21 @@ class _BpProtocolScreenState extends ConsumerState<BpProtocolScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
           ),
+          const SizedBox(height: 16),
+          TextButton.icon(
+            onPressed: () => context.push('/bp-history'),
+            icon: Icon(
+              LucideIcons.history,
+              size: 18,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+            label: Text(
+              'Ver historial de protocolos',
+              style: TextStyle(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -235,6 +250,11 @@ class _BpProtocolScreenState extends ConsumerState<BpProtocolScreen> {
     final theme = Theme.of(context);
     final completedSessions = _sessions?.where((s) => s.isCompleted).length ?? 0;
     final totalSessions = _sessions?.length ?? 0;
+    final completedDays = _sessions
+        ?.where((s) => s.isCompleted)
+        .map((s) => s.dayNumber)
+        .toSet()
+        .length ?? 0;
     
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -242,6 +262,21 @@ class _BpProtocolScreenState extends ConsumerState<BpProtocolScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildStatusCard(theme, completedSessions, totalSessions),
+          if (completedDays >= 1) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => context.push('/bp-dashboard/${_protocol!.id}'),
+                icon: const Icon(LucideIcons.barChart3),
+                label: Text(
+                  completedDays >= 2 
+                      ? 'Ver Resultados' 
+                      : 'Ver Resultados (parciales)',
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
           if (_sessions != null && _sessions!.isNotEmpty) ...[
             Text(

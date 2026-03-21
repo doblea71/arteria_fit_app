@@ -384,4 +384,12 @@ class DatabaseService {
       ORDER BY r.recorded_at ASC
     ''', [protocolId]);
   }
+
+  Future<List<Map<String, dynamic>>> getAllBpProtocols() async {
+    final db = await database;
+    return await db.query(
+      'bp_protocol',
+      orderBy: 'start_date DESC',
+    );
+  }
 }

@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Centrado texto en los temporizadores de bp_session_screen.dart (línea 304). Actualizado pubspec.yaml (v1.8.1+19).
+*Última actualización: 2026-03-21 - Forzado color de fondo claro (#F6F6F8) en el splash screen nativo tanto para Light como para Dark mode, asegurando visibilidad del logo. Actualizado pubspec.yaml (v1.8.3+21).

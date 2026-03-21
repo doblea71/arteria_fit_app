@@ -21,6 +21,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   int _isometricGoal = 2;
   Map<String, dynamic>? _lastReading;
   bool _isLoading = true;
+  int? _activeProtocolId;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final isometricCompleted = await db.getCompletedTodayCount('isometric');
     final isometricGoal = await db.getDailyGoal('isometric');
     final lastReading = await db.getLastBloodPressureReading();
+    final activeProtocol = await db.getActiveBpProtocol();
 
     if (mounted) {
       setState(() {
@@ -58,6 +60,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
         _isometricCompleted = isometricCompleted;
         _isometricGoal = isometricGoal;
         _lastReading = lastReading;
+        _activeProtocolId = activeProtocol?['id'] as int?;
         _isLoading = false;
       });
     }
@@ -415,6 +418,38 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ),
             ),
+            TextButton.icon(
+              onPressed: () => context.push('/bp-history'),
+              icon: Icon(
+                LucideIcons.history,
+                size: 16,
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+              label: Text(
+                'Historial',
+                style: TextStyle(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  fontSize: 13,
+                ),
+              ),
+            ),
+            if (_activeProtocolId != null)
+              TextButton.icon(
+                onPressed: () => context.push('/bp-dashboard/$_activeProtocolId'),
+                icon: Icon(
+                  LucideIcons.barChart3,
+                  size: 16,
+                  color: colorScheme.primary,
+                ),
+                label: Text(
+                  'Ver Resultados',
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
           ],
         ),
       ),

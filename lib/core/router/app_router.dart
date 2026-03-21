@@ -11,6 +11,7 @@ import '../../screens/bp_protocol_screen.dart';
 import '../../screens/bp_session_screen.dart';
 import '../../screens/bp_recommendations_screen.dart';
 import '../../screens/bp_dashboard_screen.dart';
+import '../../screens/bp_history_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -78,6 +79,10 @@ final GoRouter appRouter = GoRouter(
         final id = int.parse(state.pathParameters['id']!);
         return BpDashboardScreen(protocolId: id);
       },
+    ),
+    GoRoute(
+      path: '/bp-history',
+      builder: (context, state) => const BpHistoryScreen(),
     ),
   ],
 );

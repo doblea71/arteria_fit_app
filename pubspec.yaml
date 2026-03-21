@@ -4,7 +4,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.8.1+19
+version: 1.8.3+21
 
 environment:
   sdk: ^3.11.1
@@ -52,14 +52,14 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#F6F6F8"
-  color_dark: "#0F1623"
+  color_dark: "#F6F6F8"
   image: assets/logo/arteria-fit.png
   android_12:
     image: assets/logo/arteria-fit.png
     color: "#F6F6F8"
-    color_dark: "#0F1623"
+    color_dark: "#F6F6F8"
     icon_background_color: "#F6F6F8"
-    icon_background_color_dark: "#0F1623"
+    icon_background_color_dark: "#F6F6F8"
   ios: true
   web: false
 

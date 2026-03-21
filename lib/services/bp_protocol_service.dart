@@ -254,6 +254,56 @@ class BpProtocolService {
       }
     }
   }
+
+  Future<List<ProtocolSummary>> getProtocolHistory() async {
+    final protocols = await _db.getAllBpProtocols();
+    final summaries = <ProtocolSummary>[];
+    
+    for (final map in protocols) {
+      final protocol = BpProtocol.fromMap(map);
+      final sessions = await getProtocolSessions(protocol.id!);
+      final completed = sessions.where((s) => s.isCompleted).length;
+      final results = await getResults(protocol.id!);
+      
+      summaries.add(ProtocolSummary(
+        protocol: protocol,
+        completedSessions: completed,
+        totalSessions: sessions.length,
+        avgSystolic: results.hasResults ? results.averageSystolic : null,
+        avgDiastolic: results.hasResults ? results.averageDiastolic : null,
+      ));
+    }
+    
+    return summaries;
+  }
+}
+
+class ProtocolSummary {
+  final BpProtocol protocol;
+  final int completedSessions;
+  final int totalSessions;
+  final double? avgSystolic;
+  final double? avgDiastolic;
+
+  ProtocolSummary({
+    required this.protocol,
+    required this.completedSessions,
+    required this.totalSessions,
+    this.avgSystolic,
+    this.avgDiastolic,
+  });
+
+  bool get hasResults => avgSystolic != null && avgDiastolic != null;
+  String get statusText {
+    switch (protocol.status) {
+      case BpProtocolStatus.active:
+        return 'Activo';
+      case BpProtocolStatus.completed:
+        return 'Completado';
+      case BpProtocolStatus.cancelled:
+        return 'Cancelado';
+    }
+  }
 }
 
 class BpResults {
