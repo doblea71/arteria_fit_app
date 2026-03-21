@@ -1,31 +1,26 @@
 @echo off
+setlocal enabledelayedexpansion
 REM Arteria Fit - Release Build Script for Windows
-REM Batch version
+REM Updated to support --split-per-abi with custom renaming
 
 echo ==========================================
-echo    Arteria Fit - Release Build
+echo    Arteria Fit - Release Build (Split)
 echo ==========================================
 echo.
 
-REM 1. Generar el APK en release
-echo [1/5] Building release APK...
-flutter build apk --release --dart-define=IS_PRODUCTION=true
+REM 1. Generar los APKs split en release
+echo [1/4] Building release APKs (split-per-abi)...
+call flutter build apk --release --split-per-abi --dart-define=IS_PRODUCTION=true
 if %ERRORLEVEL% NEQ 0 (
     echo ❌ Build failed!
     exit /b 1
 )
 
-REM 2. Ubicación del APK generado por Flutter
-set APK_PATH=build\app\outputs\flutter-apk\app-release.apk
+REM 2. Ubicación de salida
+set OUTPUT_DIR=build\app\outputs\flutter-apk
 
-REM 3. Verificar que existe
-if not exist "%APK_PATH%" (
-    echo ❌ No se encontró el APK en %APK_PATH%
-    exit /b 1
-)
-
-REM 4. Leer versión del pubspec.yaml
-echo [2/5] Reading version from pubspec.yaml...
+REM 3. Leer versión del pubspec.yaml
+echo [2/4] Reading version from pubspec.yaml...
 for /f "tokens=2 delims= " %%a in ('findstr /b "version:" pubspec.yaml') do set FULL_VERSION=%%a
 for /f "tokens=1,2 delims=+" %%a in ("%FULL_VERSION%") do (
     set VERSION_NAME=%%a
@@ -35,29 +30,36 @@ for /f "tokens=1,2 delims=+" %%a in ("%FULL_VERSION%") do (
 if not defined VERSION_CODE set VERSION_CODE=1
 if not defined VERSION_NAME set VERSION_NAME=1.0.0
 
-REM 5. Generar nombre con timestamp
-for /f "tokens=1-4 delims=/ " %%a in ("%date% %time%") do (
-    set DATE=%%a%%b%%c_%%d
+REM 4. Procesar y renombrar cada APK generado
+echo [3/4] Processing and renaming APKs...
+
+set ABIs=armeabi-v7a arm64-v8a x86_64
+
+for %%a in (%ABIs%) do (
+    set OLD_NAME=app-%%a-release.apk
+    if exist "%OUTPUT_DIR%\!OLD_NAME!" (
+        set NEW_FILENAME=ArteriaFit-v%VERSION_NAME%+%VERSION_CODE%-%%a.apk
+        copy /Y "%OUTPUT_DIR%\!OLD_NAME!" "%OUTPUT_DIR%\!NEW_FILENAME!"
+        echo    ✅ Generated: !NEW_FILENAME!
+    )
 )
-set DATE=%DATE::=%
-set DATE=%DATE: =%
-set DATE=%DATE:/=%
 
-set NEW_NAME=arteria_fit_app-release-v%VERSION_NAME%+%VERSION_CODE%-%DATE%.apk
-
-REM 6. Copiar y renombrar
-echo [3/5] Copying and renaming APK...
-copy /Y "%APK_PATH%" "build\app\outputs\flutter-apk\%NEW_NAME%"
+REM 5. Renombrar fat APK si existe
+if exist "%OUTPUT_DIR%\app-release.apk" (
+    set NEW_FAT_NAME=ArteriaFit-v%VERSION_NAME%+%VERSION_CODE%-universal.apk
+    copy /Y "%OUTPUT_DIR%\app-release.apk" "%OUTPUT_DIR%\!NEW_FAT_NAME!"
+    echo    ✅ Generated: !NEW_FAT_NAME! (Universal)
+)
 
 echo.
-echo ✅ APK successfully built and renamed:
-echo    File: %NEW_NAME%
+echo ==========================================
+echo    Build Summary
+echo ==========================================
 echo    Version: %VERSION_NAME%
 echo    Build: %VERSION_CODE%
-echo    Date: %DATE%
-echo    Path: build\app\outputs\flutter-apk\%NEW_NAME%
+echo    Path: %OUTPUT_DIR%
 echo.
-echo [4/5] Listing all release APKs:
-dir /b build\app\outputs\flutter-apk\arteria_fit_app-release*.apk
+echo [4/4] Listing final files:
+dir /b %OUTPUT_DIR%\ArteriaFit-v*.apk
 echo.
-echo [5/5] Done!
+echo Done!

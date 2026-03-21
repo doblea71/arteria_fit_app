@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Agregada pestaña "Control 7 Días" en pantalla de Actividad. Ahora se puede acceder al historial de protocolos desde 4 lugares: dashboard, pantalla de protocolo, historial BP y pantalla de actividad. Actualizado pubspec.yaml (v1.8.5+23).
+*Última actualización: 2026-03-21 - Actualizados scripts de build (PS1 y BAT) para soportar --split-per-abi con renombrado personalizado (ArteriaFit-v1.8.5+23-ABI.apk). Build generado con éxito. Actualizado pubspec.yaml (v1.8.5+23).

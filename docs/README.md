@@ -20,7 +20,6 @@ El ejercicio de respiración 4-7-8 es una técnica desarrollado por el Dr. Andre
 **¿Cómo funciona?**
 
 La app te guía con animaciones fluidas a través de tres fases:
-
 - **Inhala** durante 4 segundos
 - **Mantén** la respiración durante 7 segundos
 - **Exhala** lentamente durante 8 segundos
@@ -140,6 +139,5 @@ Para instalar la app en tu dispositivo Android:
 3. Abre el archivo APK y sigue las instrucciones de instalación
 
 ---
-Ruta del release: https://github.com/doblea71/arteria_fit_app/releases/tag/V1.8.5%2B23
 
 **Versión actual:** 1.8.5+23
