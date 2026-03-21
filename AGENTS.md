@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Forzado color de fondo claro (#F6F6F8) en el splash screen nativo tanto para Light como para Dark mode, asegurando visibilidad del logo. Actualizado pubspec.yaml (v1.8.3+21).
+*Última actualización: 2026-03-21 - Agregada pantalla de historial de protocolos BP. Ahora se pueden ver todos los protocolos anteriores con sus resultados. Acceso desde dashboard y pantalla de protocolo. Actualizado pubspec.yaml (v1.8.4+22).
