@@ -4,6 +4,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/services/database_service.dart';
+import '../../services/bp_protocol_service.dart';
+import '../../models/bp_protocol_model.dart';
 
 class ActivityScreen extends ConsumerStatefulWidget {
   const ActivityScreen({super.key});
@@ -16,12 +18,13 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTick
   late TabController _tabController;
   List<Map<String, dynamic>> _exerciseLogs = [];
   List<Map<String, dynamic>> _bpLogs = [];
+  List<ProtocolSummary>? _protocols;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _loadData();
   }
 
@@ -35,11 +38,14 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTick
     final db = DatabaseService();
     final exerciseLogs = await db.getAllLogs();
     final bpLogs = await db.getBloodPressureReadings();
+    final bpService = BpProtocolService();
+    final protocols = await bpService.getProtocolHistory();
     
     if (mounted) {
       setState(() {
         _exerciseLogs = exerciseLogs;
         _bpLogs = bpLogs;
+        _protocols = protocols;
         _isLoading = false;
       });
     }
@@ -78,6 +84,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTick
           tabs: const [
             Tab(text: 'Ejercicios'),
             Tab(text: 'Tensión'),
+            Tab(text: 'Control 7 Días'),
           ],
         ),
       ),
@@ -88,6 +95,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTick
               children: [
                 _buildLogsList(_exerciseLogs, isExercise: true),
                 _buildLogsList(_bpLogs, isExercise: false),
+                _buildProtocolHistoryList(),
               ],
             ),
       floatingActionButton: _tabController.index == 1 ? FloatingActionButton.extended(
@@ -282,5 +290,167 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> with SingleTick
     final minute = dateTime.minute.toString().padLeft(2, '0');
 
     return '$datePrefix$hour:$minute';
+  }
+
+  Widget _buildProtocolHistoryList() {
+    if (_protocols == null || _protocols!.isEmpty) {
+      return _buildEmptyProtocolState();
+    }
+
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: _protocols!.length,
+        itemBuilder: (context, index) {
+          return _buildProtocolCard(_protocols![index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmptyProtocolState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            LucideIcons.calendarDays,
+            size: 64,
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No hay protocolos registrados',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProtocolCard(ProtocolSummary summary) {
+    final statusColor = switch (summary.protocol.status) {
+      BpProtocolStatus.active => Theme.of(context).colorScheme.primary,
+      BpProtocolStatus.completed => Colors.green,
+      BpProtocolStatus.cancelled => Colors.orange,
+    };
+
+    final statusIcon = switch (summary.protocol.status) {
+      BpProtocolStatus.active => LucideIcons.clock,
+      BpProtocolStatus.completed => LucideIcons.checkCircle,
+      BpProtocolStatus.cancelled => LucideIcons.xCircle,
+    };
+
+    final dateStr = '${summary.protocol.startDate.day}/${summary.protocol.startDate.month}/${summary.protocol.startDate.year}';
+
+    return GestureDetector(
+      onTap: () => context.push('/bp-dashboard/${summary.protocol.id}'),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(LucideIcons.calendarDays, size: 16, color: Theme.of(context).colorScheme.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Protocolo #${summary.protocol.id}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: statusColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(statusIcon, size: 12, color: statusColor),
+                      const SizedBox(width: 4),
+                      Text(
+                        summary.statusText,
+                        style: TextStyle(color: statusColor, fontSize: 11, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(LucideIcons.calendar, size: 14, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+                const SizedBox(width: 6),
+                Text(
+                  'Fecha: $dateStr',
+                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Icon(LucideIcons.activity, size: 14, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+                const SizedBox(width: 6),
+                Text(
+                  'Sesiones: ${summary.completedSessions}/${summary.totalSessions}',
+                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
+                ),
+              ],
+            ),
+            if (summary.hasResults) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(LucideIcons.heart, size: 14, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Promedio: ${summary.avgSystolic!.round()}/${summary.avgDiastolic!.round()} mmHg',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: statusColor),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Ver detalles',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+                Icon(
+                  LucideIcons.arrowRight,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

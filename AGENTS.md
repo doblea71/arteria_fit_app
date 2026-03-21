@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Agregada pantalla de historial de protocolos BP. Ahora se pueden ver todos los protocolos anteriores con sus resultados. Acceso desde dashboard y pantalla de protocolo. Actualizado pubspec.yaml (v1.8.4+22).
+*Última actualización: 2026-03-21 - Agregada pestaña "Control 7 Días" en pantalla de Actividad. Ahora se puede acceder al historial de protocolos desde 4 lugares: dashboard, pantalla de protocolo, historial BP y pantalla de actividad. Actualizado pubspec.yaml (v1.8.5+23).
