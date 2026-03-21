@@ -399,6 +399,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: () => context.push('/bp-protocol'),
+              icon: Icon(
+                LucideIcons.calendarDays,
+                size: 16,
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+              label: Text(
+                'Control 7 días',
+                style: TextStyle(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  fontSize: 13,
+                ),
+              ),
+            ),
           ],
         ),
       ),

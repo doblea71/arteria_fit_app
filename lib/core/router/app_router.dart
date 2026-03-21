@@ -7,6 +7,10 @@ import '../../features/settings/settings_screen.dart';
 import '../../features/activity/activity_screen.dart';
 import '../../features/activity/blood_pressure_entry_screen.dart';
 import '../../screens/recipes_screen.dart';
+import '../../screens/bp_protocol_screen.dart';
+import '../../screens/bp_session_screen.dart';
+import '../../screens/bp_recommendations_screen.dart';
+import '../../screens/bp_dashboard_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -42,6 +46,38 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/recipes',
       builder: (context, state) => const RecipesScreen(),
+    ),
+    GoRoute(
+      path: '/bp-protocol',
+      builder: (context, state) => const BpProtocolScreen(),
+    ),
+    GoRoute(
+      path: '/bp-session/:id',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BpSessionScreen(sessionId: id);
+      },
+    ),
+    GoRoute(
+      path: '/bp-session/:id/recommendations',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BpRecommendationsScreen(sessionId: id);
+      },
+    ),
+    GoRoute(
+      path: '/bp-session/:id/record',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BpSessionScreen(sessionId: id);
+      },
+    ),
+    GoRoute(
+      path: '/bp-dashboard/:id',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BpDashboardScreen(protocolId: id);
+      },
     ),
   ],
 );

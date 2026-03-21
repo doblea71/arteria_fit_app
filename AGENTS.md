@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-19 - Implementado icono de launcher personalizado y splash screen nativo con soporte Light/Dark mode. Generados iconos adaptativos para Android e iOS. Actualizado pubspec.yaml (v1.7.1+15).
+*Última actualización: 2026-03-21 - Corregido error UnsupportedError (read-only) en getBpSessionsWithReadings en database_service.dart. Actualizado pubspec.yaml (v1.8.1+18).

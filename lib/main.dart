@@ -4,10 +4,12 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/theme_provider.dart';
+import 'services/notification_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+  await NotificationService().init();
   runApp(
     const ProviderScope(
       child: ArteriaFitApp(),
