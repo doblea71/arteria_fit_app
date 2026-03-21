@@ -1,3 +1,21 @@
+Orden de implementación global recomendado
+Orden | SPEC| Razón|
+|-----|-----|-----|
+|1|SPEC-007|Cambio de contenido puro, mínimo riesgo|
+|2|SPEC-011|Wake lock, quirúrgico, alto valor UX|
+|3|SPEC-002|Desbloquea todo el sistema de tema|
+|4|SPEC-006|Depende de SPEC-002|
+|5|SPEC-010|Visual, independiente|
+|6|SPEC-003|Base háptica|
+|7|SPEC-008|Depende de SPEC-003|
+|8|SPEC-009|Depende de SPEC-003|
+|9|SPEC-001|Bug crítico, coordinar con 008 y 010|
+|10|SPEC-004|Base de persistencia|
+|11|SPEC-005|Depende de SPEC-004|
+|12|SPEC-012|Feature nueva completa|
+|13|SPEC-013|Requiere assets de diseño listos|
+|14|SPEC-014|Feature más compleja, depende de 002 y 004|
+
 ## Mapa de Dependencias entre SPECs
 ```text
 SPEC-002 (Tema)
@@ -49,3 +67,25 @@ SPEC-004 (SQLite)
 SPEC-011  ← independiente, bajo riesgo
 SPEC-010  ← independiente salvo interacción con SPEC-001
 SPEC-007  ← independiente, cambio de contenido puro
+
+---
+
+## Mapa de dependencias actualizado (todos los SPECs)
+```
+SPEC-002 (Tema)
+    └──> SPEC-006, SPEC-012, SPEC-014
+
+SPEC-003 (HapticService)
+    └──> SPEC-008, SPEC-009
+
+SPEC-004 (SQLite)
+    └──> SPEC-005, SPEC-014 (preferido)
+
+SPEC-001 (Cierre grácil 4-7-8)
+    └──> SPEC-008, SPEC-010
+
+SPEC-011  independiente
+SPEC-007  independiente
+SPEC-010  independiente (interacción leve con SPEC-001)
+SPEC-013  independiente (bloqueado por assets de diseño)
+SPEC-014  independiente funcionalmente; se beneficia de SPEC-002 y SPEC-004
