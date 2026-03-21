@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Implementado protocolo de control de tensión arterial de 7 días. Incluye: pantalla de protocolo, sesiones guiadas con recomendaciones, temporizadores, validación de valores, dashboard de resultados con gráficos. Acceso desde botón "Control 7 días" en el card de presión arterial del dashboard. Actualizado pubspec.yaml (v1.8.1+18).
+*Última actualización: 2026-03-21 - Centrado texto en los temporizadores de bp_session_screen.dart (línea 304). Actualizado pubspec.yaml (v1.8.1+19).

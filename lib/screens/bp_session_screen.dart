@@ -265,6 +265,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
           Text(
             'Tiempo de reposo',
             style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
@@ -280,6 +281,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 48),
           OutlinedButton(
@@ -303,6 +305,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
           Text(
             'Espera antes de la siguiente lectura',
             style: theme.textTheme.headlineSmall,
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           Text(
@@ -318,6 +321,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
