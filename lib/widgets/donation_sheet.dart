@@ -88,14 +88,6 @@ class _DonationSheetContentState extends State<_DonationSheetContent> {
             color: Colors.blue,
             onTap: () => _openDonation(DonationPlatform.paypal),
           ),
-          const SizedBox(height: 12),
-          _DonationOptionButton(
-            icon: LucideIcons.github,
-            title: 'GitHub Sponsors',
-            subtitle: 'Apoyo integrado con GitHub',
-            color: Colors.grey,
-            onTap: () => _openDonation(DonationPlatform.githubSponsors),
-          ),
           const SizedBox(height: 16),
           TextButton(
             onPressed: () {

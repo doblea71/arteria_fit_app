@@ -49,12 +49,14 @@
 ## 6. Testing & Verification
 
 - [x] 6.1 Run `flutter analyze` to verify no issues
-- [ ] 6.2 Test donation sheet opens from settings
-- [ ] 6.3 Test Ko-fi button opens browser
-- [ ] 6.4 Test PayPal button opens browser
-- [ ] 6.5 Test "Quizás más tarde" dismisses and records
-- [ ] 6.6 Test "Ya doné" marks as donor and shows badge
+- [x] 6.2 Test donation sheet opens from settings ✓
+- [x] 6.3 Test Ko-fi button opens browser ✓
+- [x] 6.4 Test PayPal button opens browser ✓
+- [x] 6.5 Test "Quizás más tarde" dismisses and records ✓
+- [x] 6.6 Test "Ya doné" marks as donor and shows badge ✓
 - [ ] 6.7 Test rate limiting (don't show within 30 days)
 - [ ] 6.8 Test session #7 trigger
 - [ ] 6.9 Test history 20+ records trigger
 - [ ] 6.10 Test Light/Dark theme consistency
+
+**Nota:** GitHub Sponsors removido (URL 404)
