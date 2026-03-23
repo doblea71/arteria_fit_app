@@ -201,21 +201,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _openUrl(String url) async {
     try {
       final uri = Uri.parse(url);
-      final canLaunch = await canLaunchUrl(uri);
-      if (canLaunch) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('No se puede abrir: $url')));
-        }
-      }
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error al abrir URL: $e')));
+        ).showSnackBar(SnackBar(content: Text('Error al abrir: $url')));
       }
     }
   }
