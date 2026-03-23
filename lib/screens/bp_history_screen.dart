@@ -5,6 +5,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../models/bp_protocol_model.dart';
 import '../services/bp_protocol_service.dart';
 import '../core/providers/theme_provider.dart';
+import '../core/services/donation_service.dart';
+import '../core/services/database_service.dart';
+import '../widgets/donation_sheet.dart';
 
 final bpProtocolServiceProvider = Provider((ref) => BpProtocolService());
 
@@ -32,6 +35,21 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
       _protocols = protocols;
       _isLoading = false;
     });
+    _checkAndShowDonation();
+  }
+
+  Future<void> _checkAndShowDonation() async {
+    final db = DatabaseService();
+    final readings = await db.getBloodPressureReadings();
+
+    if (readings.length >= 20) {
+      final donationService = DonationService();
+      final shouldShow = await donationService.shouldShowDonationPrompt();
+      if (shouldShow && mounted) {
+        await donationService.markDonationPromptShown();
+        showDonationSheet(context);
+      }
+    }
   }
 
   @override
@@ -53,8 +71,12 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
             ),
             actions: [
               IconButton(
-                icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode, color: theme.colorScheme.onSurface),
-                onPressed: () => ref.read(themeModeProvider.notifier).toggleTheme(),
+                icon: Icon(
+                  isDark ? Icons.light_mode : Icons.dark_mode,
+                  color: theme.colorScheme.onSurface,
+                ),
+                onPressed: () =>
+                    ref.read(themeModeProvider.notifier).toggleTheme(),
               ),
               const SizedBox(width: 8),
             ],
@@ -62,7 +84,11 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
               title: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('assets/logo/arteria-fit.png', height: 28, width: 28),
+                  Image.asset(
+                    'assets/logo/arteria-fit.png',
+                    height: 28,
+                    width: 28,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Historial',
@@ -79,13 +105,15 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
           ),
           SliverToBoxAdapter(
             child: _isLoading
-                ? const Center(child: Padding(
-                    padding: EdgeInsets.all(40),
-                    child: CircularProgressIndicator(),
-                  ))
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(40),
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
                 : _protocols == null || _protocols!.isEmpty
-                    ? _buildEmptyState(theme)
-                    : _buildProtocolList(theme),
+                ? _buildEmptyState(theme)
+                : _buildProtocolList(theme),
           ),
         ],
       ),
@@ -98,16 +126,9 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
       child: Column(
         children: [
           const SizedBox(height: 40),
-          Icon(
-            LucideIcons.history,
-            size: 80,
-            color: theme.colorScheme.outline,
-          ),
+          Icon(LucideIcons.history, size: 80, color: theme.colorScheme.outline),
           const SizedBox(height: 24),
-          Text(
-            'Sin historial',
-            style: theme.textTheme.headlineSmall,
-          ),
+          Text('Sin historial', style: theme.textTheme.headlineSmall),
           const SizedBox(height: 12),
           Text(
             'No hay protocolos registrados',
@@ -145,7 +166,8 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
       BpProtocolStatus.cancelled => LucideIcons.xCircle,
     };
 
-    final dateStr = '${summary.protocol.startDate.day}/${summary.protocol.startDate.month}/${summary.protocol.startDate.year}';
+    final dateStr =
+        '${summary.protocol.startDate.day}/${summary.protocol.startDate.month}/${summary.protocol.startDate.year}';
 
     return GestureDetector(
       onTap: () => context.push('/bp-dashboard/${summary.protocol.id}'),
@@ -167,7 +189,11 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
               children: [
                 Row(
                   children: [
-                    Icon(LucideIcons.calendarDays, size: 18, color: theme.colorScheme.primary),
+                    Icon(
+                      LucideIcons.calendarDays,
+                      size: 18,
+                      color: theme.colorScheme.primary,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Protocolo #${summary.protocol.id}',
@@ -178,7 +204,10 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -205,9 +234,9 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
             _buildInfoRow(theme, LucideIcons.calendar, 'Iniciado', dateStr),
             const SizedBox(height: 8),
             _buildInfoRow(
-              theme, 
-              LucideIcons.activity, 
-              'Sesiones', 
+              theme,
+              LucideIcons.activity,
+              'Sesiones',
               '${summary.completedSessions}/${summary.totalSessions}',
             ),
             if (summary.hasResults) ...[
@@ -245,10 +274,20 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
     );
   }
 
-  Widget _buildInfoRow(ThemeData theme, IconData icon, String label, String value, {Color? valueColor}) {
+  Widget _buildInfoRow(
+    ThemeData theme,
+    IconData icon,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+        Icon(
+          icon,
+          size: 16,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        ),
         const SizedBox(width: 8),
         Text(
           '$label: ',

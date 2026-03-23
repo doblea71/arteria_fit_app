@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../models/bp_session_model.dart';
+import '../core/services/donation_service.dart';
+import '../core/services/database_service.dart';
+import '../widgets/donation_sheet.dart';
 import 'bp_protocol_screen.dart';
 
 class BpSessionScreen extends ConsumerStatefulWidget {
@@ -21,13 +24,13 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
   bool _showRestTimer = false;
   int _restSeconds = 0;
   bool _restTimerActive = false;
-  
+
   final List<Map<String, dynamic>> _readings = [
     {'systolic': null, 'diastolic': null, 'pulse': null, 'completed': false},
     {'systolic': null, 'diastolic': null, 'pulse': null, 'completed': false},
     {'systolic': null, 'diastolic': null, 'pulse': null, 'completed': false},
   ];
-  
+
   int _currentReading = 0;
   int _timerSeconds = 0;
   bool _timerActive = false;
@@ -52,7 +55,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
   Future<void> _loadSession() async {
     final service = ref.read(bpProtocolServiceProvider);
     final session = await service.getSession(widget.sessionId);
-    
+
     if (session != null && session.readings.isNotEmpty) {
       for (int i = 0; i < session.readings.length && i < 3; i++) {
         _readings[i] = {
@@ -68,7 +71,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
         return;
       }
     }
-    
+
     setState(() {
       _session = session;
       _isLoading = false;
@@ -88,7 +91,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return false;
-      
+
       setState(() {
         if (isRest) {
           _restSeconds--;
@@ -98,7 +101,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
           if (_timerSeconds <= 0) _timerActive = false;
         }
       });
-      
+
       return (isRest ? _restSeconds : _timerSeconds) > 0;
     });
   }
@@ -110,7 +113,9 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
 
     if (systolic == null || diastolic == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ingresa valores de sistólica y diastólica')),
+        const SnackBar(
+          content: Text('Ingresa valores de sistólica y diastólica'),
+        ),
       );
       return;
     }
@@ -127,16 +132,24 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
             children: [
               const Text('Se detectaron los siguientes avisos:'),
               const SizedBox(height: 12),
-              ...warnings.map((w) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  children: [
-                    const Icon(Icons.warning_amber, color: Colors.orange, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(w, style: const TextStyle(fontSize: 13))),
-                  ],
+              ...warnings.map(
+                (w) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.warning_amber,
+                        color: Colors.orange,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(w, style: const TextStyle(fontSize: 13)),
+                      ),
+                    ],
+                  ),
                 ),
-              )),
+              ),
               const SizedBox(height: 12),
               const Text('¿Deseas guardar los valores de todos modos?'),
             ],
@@ -181,8 +194,12 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
     if (_currentReading >= 3) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sesión completada'), backgroundColor: Colors.green),
+          const SnackBar(
+            content: Text('Sesión completada'),
+            backgroundColor: Colors.green,
+          ),
         );
+        _checkAndShowDonation();
         context.pop();
       }
     } else {
@@ -191,6 +208,20 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
         _timerActive = true;
       });
       _runTimer();
+    }
+  }
+
+  Future<void> _checkAndShowDonation() async {
+    final db = DatabaseService();
+    final readings = await db.getBloodPressureReadings();
+
+    if (readings.length == 7) {
+      final donationService = DonationService();
+      final shouldShow = await donationService.shouldShowDonationPrompt();
+      if (shouldShow && mounted) {
+        await donationService.markDonationPromptShown();
+        showDonationSheet(context);
+      }
     }
   }
 
@@ -219,9 +250,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
     final theme = Theme.of(context);
 
     if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final isMorning = _session?.sessionType == BpSessionType.morning;
@@ -340,7 +369,9 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
               decoration: BoxDecoration(
                 color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.2)),
+                border: Border.all(
+                  color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                ),
               ),
               child: Column(
                 children: [
@@ -349,7 +380,9 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
                       Icon(LucideIcons.bed, color: theme.colorScheme.primary),
                       const SizedBox(width: 12),
                       const Expanded(
-                        child: Text('¿Deseas hacer 5 minutos de reposo antes de medir?'),
+                        child: Text(
+                          '¿Deseas hacer 5 minutos de reposo antes de medir?',
+                        ),
                       ),
                     ],
                   ),
@@ -367,7 +400,9 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
           const SizedBox(height: 24),
           Text(
             'Lectura ${_currentReading + 1} de 3',
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           Container(
@@ -375,7 +410,9 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               children: [
@@ -439,18 +476,18 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
             margin: EdgeInsets.only(right: index < 2 ? 8 : 0),
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: completed 
-                  ? Colors.green 
-                  : index == _currentReading 
-                      ? theme.colorScheme.primary.withValues(alpha: 0.2) 
-                      : theme.colorScheme.surface,
+              color: completed
+                  ? Colors.green
+                  : index == _currentReading
+                  ? theme.colorScheme.primary.withValues(alpha: 0.2)
+                  : theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: completed 
-                    ? Colors.green 
-                    : index == _currentReading 
-                        ? theme.colorScheme.primary 
-                        : theme.colorScheme.outline.withValues(alpha: 0.3),
+                color: completed
+                    ? Colors.green
+                    : index == _currentReading
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline.withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -458,25 +495,25 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
                 Icon(
                   completed ? Icons.check : LucideIcons.circle,
                   size: 20,
-                  color: completed 
-                      ? Colors.white 
-                      : index == _currentReading 
-                          ? theme.colorScheme.primary 
-                          : theme.colorScheme.outline,
+                  color: completed
+                      ? Colors.white
+                      : index == _currentReading
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outline,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  completed 
+                  completed
                       ? '${_readings[index]['systolic']}/${_readings[index]['diastolic']}'
                       : 'Lectura ${index + 1}',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: completed 
-                        ? Colors.white 
-                        : index == _currentReading 
-                            ? theme.colorScheme.primary 
-                            : theme.colorScheme.onSurface,
+                    color: completed
+                        ? Colors.white
+                        : index == _currentReading
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.onSurface,
                   ),
                 ),
               ],

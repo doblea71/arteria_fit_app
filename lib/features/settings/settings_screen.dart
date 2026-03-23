@@ -9,7 +9,9 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/services/database_service.dart';
 import '../../core/services/consent_manager.dart';
+import '../../core/services/donation_service.dart';
 import '../../core/constants/legal_constants.dart';
+import '../../widgets/donation_sheet.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -192,6 +194,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               color: Colors.red,
               onTap: _confirmDeleteData,
             ),
+            const SizedBox(height: 40),
+            Text(
+              'Apoyar el desarrollo',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Contribuir con el proyecto',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildDonationCard(context),
           ],
         ),
       ),
@@ -372,6 +390,101 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDonationCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final donationService = DonationService();
+
+    return FutureBuilder<bool>(
+      future: donationService.isDonor(),
+      builder: (context, snapshot) {
+        final isDonor = snapshot.data ?? false;
+
+        return InkWell(
+          onTap: () => showDonationSheet(context),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.amber.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.amber.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    isDonor ? LucideIcons.heart : LucideIcons.coffee,
+                    color: Colors.amber.shade700,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Apoyar el desarrollo',
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (isDonor) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Ya donaste',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.green.shade700,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        isDonor
+                            ? '¡Gracias por tu apoyo!'
+                            : 'Contribuye con el proyecto',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  LucideIcons.chevronRight,
+                  size: 16,
+                  color: Colors.amber.shade700,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
