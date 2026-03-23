@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-21 - Actualizados scripts de build (PS1 y BAT) para soportar --split-per-abi con renombrado personalizado (ArteriaFit-v1.8.5+23-ABI.apk). Build generado con éxito. Actualizado pubspec.yaml (v1.8.5+23).
+*Última actualización: 2026-03-23 - Completada configuración iOS notifications en Info.plist para bp-7-day-protocol. Re-abierto change para completar tareas pendientes. Actualizado pubspec.yaml (v1.8.6+24).
