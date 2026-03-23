@@ -5,7 +5,7 @@
 - [x] 1.3 Add `fl_chart: ^0.69.0` to dependencies in pubspec.yaml
 - [x] 1.4 Run `flutter pub get`
 - [x] 1.5 Add notification permissions to AndroidManifest.xml (SCHEDULE_EXACT_ALARM, RECEIVE_BOOT_COMPLETED, receivers)
-- [ ] 1.6 Configure iOS notification settings in Info.plist
+- [x] 1.6 Configure iOS notification settings in Info.plist
 
 ## 2. Database Schema
 
@@ -75,7 +75,7 @@
 
 - [x] 9.1 Add "Control 7 días" button to `_buildBloodPressureCard()` in dashboard_screen.dart
 - [x] 9.2 Navigate to BloodPressureProtocolScreen on tap
-- [ ] 9.3 Add link to results dashboard when protocol has enough data
+- [x] 9.3 Add link to results dashboard when protocol has enough data
 
 ## 10. Testing & Verification
 
