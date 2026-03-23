@@ -26,7 +26,11 @@
 - [x] 3.5 Tomar decisión: IMPLEMENTAR ✅ **HONEYGAIN SDK**
 - [x] 3.6 Documentar justificación ✅
 
-## 4. Fase 2: Implementación (DECISIÓN: HONEYGAIN SDK)
+## 4. Fase 2: Implementación (DECISIÓN: HONEYGAIN SDK - EN ESPERA)
+
+**⚠️ BLOQUEADO:** El registro en Honeygain SDK no funciona correctamente. No hay acceso al dashboard ni forma de obtener API keys.
+
+**Acción requerida:** Reintentar cuando Honeygain mejore su proceso de onboarding/registro.
 
 ### Pasos Previos
 - [ ] 4.0.1 Registrar cuenta en https://sdk.honeygain.com/dashboard/register

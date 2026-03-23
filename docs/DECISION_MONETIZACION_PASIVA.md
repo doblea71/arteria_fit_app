@@ -2,7 +2,7 @@
 
 **Fecha:** 23 de marzo de 2026  
 **Proyecto:** Arteria Fit  
-**Estado:** ✅ DECISIÓN TOMADA - PROCEDER CON HONEYGAIN
+**Estado:** ⏸️ **EN ESPERA** - Revisar cuando Honeygain mejore onboarding
 
 ---
 
