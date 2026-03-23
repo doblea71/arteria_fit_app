@@ -89,3 +89,58 @@ SPEC-007  independiente
 SPEC-010  independiente (interacción leve con SPEC-001)
 SPEC-013  independiente (bloqueado por assets de diseño)
 SPEC-014  independiente funcionalmente; se beneficia de SPEC-002 y SPEC-004
+
+---
+
+## SPECs de Monetización (SPEC-015 a SPEC-018)
+
+### Orden de Implementación Recomendado
+
+| Orden | SPEC | Razón |
+|-------|------|-------|
+| 1 | SPEC-015 | Prerrequisito obligatorio - Documentos legales necesarios para RGPD |
+| 2 | SPEC-016 | CMP - Depende de SPEC-015, prerequisito para monetización |
+| 3 | SPEC-017 | Sistema de Donaciones - Depende de SPEC-015 y SPEC-016 |
+| 4 | SPEC-018 | Infatica - Depende de SPEC-015 y SPEC-016, requiere investigación previa |
+
+### Mapa de Dependencias - Monetización
+
+```
+SPEC-015 (Infraestructura Legal y GitHub Pages)
+    └──> SPEC-016 (Centro de Consentimiento CMP)  [requiere URLs legales]
+    └──> SPEC-017 (Sistema de Donaciones)        [requiere Política de Privacidad]
+    └──> SPEC-018 (Infatica SDK)                  [requiere Política de Privacidad]
+
+SPEC-016 (Centro de Consentimiento CMP)
+    └──> SPEC-017 (Sistema de Donaciones)        [requiere consentimiento]
+    └──> SPEC-018 (Infatica SDK)                  [requiere consentimiento explícito]
+
+SPEC-017 (Sistema de Donaciones)
+    ← independiente después de SPEC-015 y SPEC-016
+
+SPEC-018 (Infatica SDK)
+    ← FASE 1: Investigación (obligatoria antes de implementar)
+    ← FASE 2: Implementación (solo si investigación positiva)
+```
+
+### Restricciones Conocidas
+
+| Restricción | Impacto |
+|-------------|---------|
+| Sin cuenta de Google Play | No se puede usar IAP de Google |
+| Sin cuenta de Apple Store | No se puede usar IAP de Apple |
+| Distribución GitHub Release | Donaciones deben ser externas (Ko-fi, PayPal) |
+| Desconocimiento de Infatica | SPEC-018 requiere Fase 1 de investigación |
+| Sin documentos legales RGPD | SPEC-015 es obligatorio primero |
+
+### Notas Importantes
+
+1. **SPEC-015 es bloqueante crítico**: Sin documentos legales públicos, no se puede cumplir con RGPD.
+
+2. **SPEC-016 es prerequisito**: El CMP debe implementarse antes de cualquier funcionalidad de monetización.
+
+3. **SPEC-017 es independiente después de prerrequisitos**: Una vez completados SPEC-015 y SPEC-016, puede implementarse sin esperar a SPEC-018.
+
+4. **SPEC-018 es condicional**: Tiene dos fases. La Fase 1 (investigación) DEBE completarse antes de decidir si implementar la Fase 2.
+
+5. **SPEC-018 puede ser rechazado**: Si la investigación determina que Infatica no es viable, el SPEC se cancela y se documenta la decisión.
