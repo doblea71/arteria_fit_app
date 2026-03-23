@@ -204,4 +204,4 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-23 - Completada configuración iOS notifications en Info.plist para bp-7-day-protocol. Re-abierto change para completar tareas pendientes. Actualizado pubspec.yaml (v1.8.6+24).
+*Última actualización: 2026-03-23 - Implementado Centro de Consentimiento (CMP) con onboarding de privacidad, gestión de consentimientos, exportación/eliminación de datos. Actualizado pubspec.yaml (v1.8.8+26).

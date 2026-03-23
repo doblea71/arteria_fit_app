@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/services/database_service.dart';
+import '../../core/services/consent_manager.dart';
+import '../../core/constants/legal_constants.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -140,10 +143,353 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 40),
+            Text(
+              'Privacidad y Apoyo',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Gestiona tu privacidad y opciones de apoyo',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildPrivacyLink(
+              context,
+              title: 'Política de Privacidad',
+              icon: LucideIcons.fileText,
+              onTap: () => _openUrl(LegalConstants.privacyPolicyUrl),
+            ),
+            const SizedBox(height: 8),
+            _buildPrivacyLink(
+              context,
+              title: 'Términos de Uso',
+              icon: LucideIcons.fileCheck,
+              onTap: () => _openUrl(LegalConstants.termsOfUseUrl),
+            ),
+            const SizedBox(height: 16),
+            _buildConsentStatusCard(context),
+            const SizedBox(height: 16),
+            _buildActionButton(
+              context,
+              title: 'Exportar mis datos',
+              icon: LucideIcons.download,
+              color: Colors.blue,
+              onTap: _exportData,
+            ),
+            const SizedBox(height: 8),
+            _buildActionButton(
+              context,
+              title: 'Eliminar todos mis datos',
+              icon: LucideIcons.trash2,
+              color: Colors.red,
+              onTap: _confirmDeleteData,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Widget _buildPrivacyLink(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest.withValues(
+            alpha: 0.5,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 12),
+            Expanded(child: Text(title, style: theme.textTheme.bodyLarge)),
+            Icon(
+              LucideIcons.externalLink,
+              size: 16,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConsentStatusCard(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                LucideIcons.shield,
+                size: 20,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Estado del consentimiento',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          FutureBuilder<Map<String, dynamic>>(
+            future: _loadConsentStatus(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                );
+              }
+              final consents = snapshot.data!;
+              return Column(
+                children: [
+                  _buildConsentRow(
+                    'Tip Jar',
+                    consents['tip_jar_consent'] ?? false,
+                    theme,
+                  ),
+                  const SizedBox(height: 4),
+                  _buildConsentRow(
+                    'Monetización pasiva',
+                    consents['passive_monetization_consent_given'] ?? false,
+                    theme,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildConsentRow(String label, bool value, ThemeData theme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: theme.textTheme.bodySmall),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: value
+                ? Colors.green.withValues(alpha: 0.2)
+                : Colors.grey.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            value ? 'Activado' : 'Desactivado',
+            style: TextStyle(
+              fontSize: 12,
+              color: value ? Colors.green.shade700 : Colors.grey.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<Map<String, dynamic>> _loadConsentStatus() async {
+    final consentManager = ConsentManager();
+    return await consentManager.getAllConsents();
+  }
+
+  Widget _buildActionButton(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: color),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Icon(LucideIcons.chevronRight, size: 16, color: color),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportData() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    try {
+      final consentManager = ConsentManager();
+      final data = await consentManager.exportUserData();
+      final json = consentManager.exportToJson(data);
+
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text('Datos exportados: ${json.length} caracteres'),
+          action: SnackBarAction(label: 'OK', onPressed: () {}),
+        ),
+      );
+    } catch (e) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error al exportar: $e')),
+      );
+    }
+  }
+
+  Future<void> _confirmDeleteData() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Eliminar datos'),
+        content: const Text('Esta acción no se puede deshacer. ¿Estás seguro?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      _showDeleteConfirmationDialog();
+    }
+  }
+
+  Future<void> _showDeleteConfirmationDialog() async {
+    final textController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar eliminación'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Escribe "ELIMINAR" para confirmar:'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: textController,
+              decoration: const InputDecoration(
+                hintText: 'ELIMINAR',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, textController.text == 'ELIMINAR');
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Confirmar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      await _deleteAllData();
+    }
+  }
+
+  Future<void> _deleteAllData() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 16),
+            Text('Eliminando datos...'),
+          ],
+        ),
+      ),
+    );
+
+    try {
+      final consentManager = ConsentManager();
+      await consentManager.deleteAllUserData();
+
+      if (mounted) {
+        Navigator.pop(context);
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(
+            content: Text('Datos eliminados. La app se reiniciará.'),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context);
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error al eliminar: $e')),
+        );
+      }
+    }
   }
 
   Widget _buildGoalCard(
@@ -192,7 +538,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     Text(
                       subtitle,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ],
@@ -203,10 +551,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              Text(
-                'Meta diaria: ',
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text('Meta diaria: ', style: theme.textTheme.bodyMedium),
               SizedBox(
                 width: 80,
                 child: TextField(
@@ -224,10 +569,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                 ),
               ),
-              Text(
-                ' ejercicios',
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text(' ejercicios', style: theme.textTheme.bodyMedium),
             ],
           ),
         ],
