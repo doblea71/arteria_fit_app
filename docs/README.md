@@ -140,4 +140,4 @@ Para instalar la app en tu dispositivo Android:
 
 ---
 
-**Versión actual:** 1.8.5+23
+**Versión actual:** 1.8.9+27
