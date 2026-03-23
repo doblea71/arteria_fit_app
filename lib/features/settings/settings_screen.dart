@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/providers/theme_provider.dart';
 import '../../core/services/database_service.dart';
 import '../../core/services/consent_manager.dart';
@@ -196,9 +199,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    try {
+      final uri = Uri.parse(url);
+      final canLaunch = await canLaunchUrl(uri);
+      if (canLaunch) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('No se puede abrir: $url')));
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al abrir URL: $e')));
+      }
     }
   }
 
@@ -368,21 +386,55 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Future<void> _exportData() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 16),
+            Text('Exportando datos...'),
+          ],
+        ),
+      ),
+    );
+
     try {
       final consentManager = ConsentManager();
       final data = await consentManager.exportUserData();
       final json = consentManager.exportToJson(data);
 
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text('Datos exportados: ${json.length} caracteres'),
-          action: SnackBarAction(label: 'OK', onPressed: () {}),
-        ),
-      );
+      final directory = await getApplicationDocumentsDirectory();
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
+      final file = File('${directory.path}/arteria_fit_export_$timestamp.json');
+      await file.writeAsString(json);
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      await Share.shareXFiles([
+        XFile(file.path),
+      ], text: 'Datos exportados de Arteria Fit');
+
+      if (mounted) {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(
+              'Archivo guardado en: Documents/arteria_fit_export_$timestamp.json',
+            ),
+          ),
+        );
+      }
     } catch (e) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(content: Text('Error al exportar: $e')),
-      );
+      if (mounted) {
+        Navigator.pop(context);
+        scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error al exportar: $e')),
+        );
+      }
     }
   }
 
