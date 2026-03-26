@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -9,7 +10,9 @@ import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+  if (!kIsWeb) {
+    FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+  }
   await NotificationService().init();
   runApp(const ProviderScope(child: ArteriaFitApp()));
 }
@@ -38,7 +41,9 @@ class _ArteriaFitAppState extends ConsumerState<ArteriaFitApp> {
     final hasCompletedOnboarding = await consentManager
         .hasCompletedOnboarding();
 
-    FlutterNativeSplash.remove();
+    if (!kIsWeb) {
+      FlutterNativeSplash.remove();
+    }
     if (mounted) {
       setState(() {
         _isInitialized = true;
@@ -158,7 +163,7 @@ class _PrivacyOnboardingState extends State<_PrivacyOnboarding> {
       passiveMonetizationConsent: _passiveMonetizationConsent,
     );
     if (mounted) {
-      OnboardingCompleteNotification().dispatch(context);
+      const OnboardingCompleteNotification().dispatch(context);
     }
   }
 
@@ -299,25 +304,25 @@ class _PrivacyOnboardingState extends State<_PrivacyOnboarding> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ListTile(
-            leading: const Icon(Icons.visibility),
-            title: const Text('Acceso'),
-            subtitle: const Text('Consulta tus datos'),
+          const ListTile(
+            leading: Icon(Icons.visibility),
+            title: Text('Acceso'),
+            subtitle: Text('Consulta tus datos'),
           ),
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Rectificación'),
-            subtitle: const Text('Corrige datos'),
+          const ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Rectificación'),
+            subtitle: Text('Corrige datos'),
           ),
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text('Supresión'),
-            subtitle: const Text('Elimina tus datos'),
+          const ListTile(
+            leading: Icon(Icons.delete),
+            title: Text('Supresión'),
+            subtitle: Text('Elimina tus datos'),
           ),
-          ListTile(
-            leading: const Icon(Icons.download),
-            title: const Text('Portabilidad'),
-            subtitle: const Text('Exporta tus datos'),
+          const ListTile(
+            leading: Icon(Icons.download),
+            title: Text('Portabilidad'),
+            subtitle: Text('Exporta tus datos'),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
 
@@ -10,6 +11,9 @@ class DatabaseService {
   DatabaseService._internal();
 
   Future<Database> get database async {
+    if (kIsWeb) {
+      throw UnsupportedError('sqflite is not supported on web');
+    }
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
@@ -176,7 +180,14 @@ class DatabaseService {
     final db = await database;
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
-    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59).toIso8601String();
+    final endOfDay = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      23,
+      59,
+      59,
+    ).toIso8601String();
 
     return await db.query(
       'exercise_log',
@@ -187,10 +198,7 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getBloodPressureReadings() async {
     final db = await database;
-    return await db.query(
-      'blood_pressure_log',
-      orderBy: 'created_at DESC',
-    );
+    return await db.query('blood_pressure_log', orderBy: 'created_at DESC');
   }
 
   Future<Map<String, dynamic>?> getLastBloodPressureReading() async {
@@ -219,11 +227,10 @@ class DatabaseService {
 
   Future<void> setDailyGoal(String exerciseType, int goal) async {
     final db = await database;
-    await db.insert(
-      'daily_goals',
-      {'exercise_type': exerciseType, 'goal': goal},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert('daily_goals', {
+      'exercise_type': exerciseType,
+      'goal': goal,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<int> getCompletedTodayCount(String exerciseType) async {
@@ -233,10 +240,7 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getAllLogs() async {
     final db = await database;
-    return await db.query(
-      'exercise_log',
-      orderBy: 'completed_at DESC',
-    );
+    return await db.query('exercise_log', orderBy: 'completed_at DESC');
   }
 
   Future<int> insertBpProtocol({
@@ -292,7 +296,9 @@ class DatabaseService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getBpSessionsByProtocol(int protocolId) async {
+  Future<List<Map<String, dynamic>>> getBpSessionsByProtocol(
+    int protocolId,
+  ) async {
     final db = await database;
     return await db.query(
       'bp_session',
@@ -322,7 +328,9 @@ class DatabaseService {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getBpSessionsWithReadings(int protocolId) async {
+  Future<List<Map<String, dynamic>>> getBpSessionsWithReadings(
+    int protocolId,
+  ) async {
     final db = await database;
     final sessions = await db.query(
       'bp_session',
@@ -365,7 +373,9 @@ class DatabaseService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getBpReadingsBySession(int sessionId) async {
+  Future<List<Map<String, dynamic>>> getBpReadingsBySession(
+    int sessionId,
+  ) async {
     final db = await database;
     return await db.query(
       'bp_reading',
@@ -375,21 +385,23 @@ class DatabaseService {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getAllBpReadingsForProtocol(int protocolId) async {
+  Future<List<Map<String, dynamic>>> getAllBpReadingsForProtocol(
+    int protocolId,
+  ) async {
     final db = await database;
-    return await db.rawQuery('''
+    return await db.rawQuery(
+      '''
       SELECT r.* FROM bp_reading r
       INNER JOIN bp_session s ON r.session_id = s.id
       WHERE s.protocol_id = ?
       ORDER BY r.recorded_at ASC
-    ''', [protocolId]);
+    ''',
+      [protocolId],
+    );
   }
 
   Future<List<Map<String, dynamic>>> getAllBpProtocols() async {
     final db = await database;
-    return await db.query(
-      'bp_protocol',
-      orderBy: 'start_date DESC',
-    );
+    return await db.query('bp_protocol', orderBy: 'start_date DESC');
   }
 }
