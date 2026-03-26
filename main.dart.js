@@ -49939,33 +49939,34 @@ a5(){return new A.XE()}}
 A.XE.prototype={
 al(){this.aG()
 this.BF()},
-BF(){var s=0,r=A.u(t.H),q=this,p
+BF(){var s=0,r=A.u(t.H),q,p=this,o
 var $async$BF=A.v(function(a,b){if(a===1)return A.q(b,r)
-for(;;)switch(s){case 0:p=A
-s=2
-return A.k(q.gdC().eN($.b_B(),t.Sa).p7(),$async$BF)
-case 2:q.T(new p.avG(q,b))
-q.rP()
-return A.r(null,r)}})
+for(;;)switch(s){case 0:s=3
+return A.k(p.gdC().eN($.b_B(),t.Sa).p7(),$async$BF)
+case 3:o=b
+if(p.c==null){s=1
+break}p.T(new A.avG(p,o))
+p.rP()
+case 1:return A.r(q,r)}})
 return A.t($async$BF,r)},
-rP(){var s=0,r=A.u(t.H),q=this,p,o,n
+rP(){var s=0,r=A.u(t.H),q,p=this,o,n,m
 var $async$rP=A.v(function(a,b){if(a===1)return A.q(b,r)
-for(;;)switch(s){case 0:n=J
-s=4
+for(;;)switch(s){case 0:s=3
 return A.k($.kW().p_(),$async$rP)
-case 4:s=n.c8(b)>=20?2:3
+case 3:m=b
+if(p.c==null){s=1
+break}s=J.c8(m)>=20?4:5
 break
-case 2:p=new A.wq()
-s=7
-return A.k(p.vv(),$async$rP)
-case 7:s=b&&q.c!=null?5:6
+case 4:o=new A.wq()
+s=8
+return A.k(o.vv(),$async$rP)
+case 8:s=b&&p.c!=null?6:7
 break
-case 5:s=8
-return A.k(p.ux(),$async$rP)
-case 8:o=q.c
-o.toString
-A.aOB(o)
-case 6:case 3:return A.r(null,r)}})
+case 6:s=9
+return A.k(o.ux(),$async$rP)
+case 9:n=p.c
+if(n!=null)A.aOB(n)
+case 7:case 5:case 1:return A.r(q,r)}})
 return A.t($async$rP,r)},
 J(a){var s,r=this,q=null,p=A.L(a),o=A.L(a),n=o.ax,m=n.k3,l=A.dU(q,q,A.b3(B.h_,m,q,q),q,q,new A.avH(a),q,q,q),k=t.p
 l=A.arC(A.b([A.dU(q,q,A.b3(p.ax.a===B.ai?B.cP:B.cO,m,q,q),q,q,new A.avI(r),q,q,q),B.aJ],k),n.k2,q,120,A.adv(!1,A.aZ(A.b([A.afB("assets/logo/arteria-fit.png",28,28),B.aJ,A.V("Historial",q,q,q,q,A.aX(q,q,m,q,q,q,q,q,q,q,q,q,q,q,B.r,q,q,!0,q,q,q,q,q,q,q,q),q,q,q)],k),B.m,B.k,B.ae,0,q),B.iG),!1,l,!0)
@@ -50414,34 +50415,34 @@ var $async$wP=A.v(function(a,b){if(a===1)return A.q(b,r)
 for(;;)switch(s){case 0:l=A.iP(p.ch.a.a,null)
 k=A.iP(p.CW.a.a,null)
 j=A.iP(p.cx.a.a,null)
-if(l==null||k==null){p.c.ab(t.Pu).f.i4(B.YU)
+if(l==null||k==null){o=p.c
+if(o==null){s=1
+break}o.ab(t.Pu).f.i4(B.YU)
 s=1
-break}o=A.b([],t.s)
-n=l<70||l>250
-if(n)o.push("Sist\xf3lica fuera del rango 70-250 mmHg")
-n=k<40||k>150
-if(n)o.push("Diast\xf3lica fuera del rango 40-150 mmHg")
-if(j!=null)n=j<30||j>200
-else n=!1
-if(n)o.push("Pulso fuera del rango 30-200 lpm")
-s=o.length!==0?3:4
+break}n=A.b([],t.s)
+o=l<70||l>250
+if(o)n.push("Sist\xf3lica fuera del rango 70-250 mmHg")
+o=k<40||k>150
+if(o)n.push("Diast\xf3lica fuera del rango 40-150 mmHg")
+if(j!=null)o=j<30||j>200
+else o=!1
+if(o)n.push("Pulso fuera del rango 30-200 lpm")
+s=n.length!==0?3:4
 break
-case 3:n=p.c
-n.toString
+case 3:o=p.c
+o.toString
 s=5
-return A.k(A.vt(null,null,!0,null,new A.awe(o),n,null,!0,t.y),$async$wP)
+return A.k(A.vt(null,null,!0,null,new A.awe(n),o,null,!0,t.y),$async$wP)
 case 5:if(b!==!0){s=1
 break}case 4:m=p.gdC().eN($.B3(),t.Sa)
-n=p.a.d
+o=p.a.d
 s=6
-return A.k(m.lX(k,j,p.at+1,n,l),$async$wP)
+return A.k(m.lX(k,j,p.at+1,o,l),$async$wP)
 case 6:p.T(new A.awf(p,l,k,j))
-if(p.at>=3){n=p.c
-if(n!=null){n.ab(t.Pu).f.i4(B.YS)
-p.rM()
-n=p.c
-n.toString
-A.eX(n).cm(null)}}else{p.T(new A.awg(p))
+if(p.at>=3){o=p.c
+if(o!=null){o.ab(t.Pu).f.i4(B.YS)
+p.rM()}o=p.c
+if(o!=null)A.eX(o).cm(null)}else{p.T(new A.awg(p))
 p.asf()}case 1:return A.r(q,r)}})
 return A.t($async$wP,r)},
 rM(){var s=0,r=A.u(t.H),q=this,p,o,n
