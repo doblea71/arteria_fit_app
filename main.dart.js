@@ -50391,7 +50391,8 @@ var $async$BH=A.v(function(a,b){if(a===1)return A.q(b,r)
 for(;;)switch(s){case 0:s=3
 return A.k(p.gdC().eN($.B3(),t.Sa).vm(p.a.d),$async$BH)
 case 3:i=b
-if(i!=null&&i.r.length!==0){o=p.as
+if(p.c==null){s=1
+break}if(i!=null&&i.r.length!==0){o=p.as
 n=i.r
 m=t.N
 l=t.z
@@ -50401,9 +50402,11 @@ if(!(k<j&&k<3))break
 j=n[k]
 o[k]=A.ag(["systolic",j.d,"diastolic",j.e,"pulse",j.f,"completed",!0],m,l);++k}p.at=j
 if(j>=3){o=p.c
-if(o!=null)A.eX(o).cm(null)
+o.toString
+A.eX(o).cm(null)
 s=1
-break}}p.T(new A.aw8(p,i))
+break}}if(p.c==null){s=1
+break}p.T(new A.aw8(p,i))
 case 1:return A.r(q,r)}})
 return A.t($async$BH,r)},
 atO(){this.T(new A.awh(this))
@@ -50438,7 +50441,8 @@ break}case 4:m=p.gdC().eN($.B3(),t.Sa)
 o=p.a.d
 s=6
 return A.k(m.lX(k,j,p.at+1,o,l),$async$wP)
-case 6:p.T(new A.awf(p,l,k,j))
+case 6:if(p.c==null){s=1
+break}p.T(new A.awf(p,l,k,j))
 if(p.at>=3){o=p.c
 if(o!=null){o.ab(t.Pu).f.i4(B.YS)
 p.rM()}o=p.c
