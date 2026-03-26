@@ -204,4 +204,79 @@ version: 1.2.26+1
 
 ---
 
-*Última actualización: 2026-03-23 - Implementado Centro de Consentimiento (CMP) con onboarding de privacidad, gestión de consentimientos, exportación/eliminación de datos. Actualizado pubspec.yaml (v1.8.8+26).
+## 🚨 Errores Comunes y Soluciones
+
+### BuildContext después de async (mounted check)
+
+Flutter produce el warning `Don't use 'BuildContext's across async gaps` cuando se usa `context` después de un `await` sin verificar si el widget sigue montado.
+
+**Solución:** Siempre añadir `if (!mounted) return;` después de cada `await` antes de usar `context`, `setState`, `ScaffoldMessenger`, etc.
+
+```dart
+// ❌ Incorrecto
+await service.getSession(id);
+setState(() { ... }); // Warning!
+
+// ✅ Correcto
+await service.getSession(id);
+if (!mounted) return;
+setState(() { ... });
+```
+
+**Archivos corregidos:**
+- `lib/screens/bp_session_screen.dart`
+- `lib/screens/bp_history_screen.dart`
+
+---
+
+### GitHub Pages Deployment
+
+**Workflow (.github/workflows/gh-pages.yml):**
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'  # Sin versión fija - usa la última estable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build web release
+        run: flutter build web --release --base-href "/doblea71/arteria_fit_app/"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          publish_branch: gh-pages
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+```
+
+**Configuración de Pages:**
+- Fuente: Rama `gh-pages`
+- Path: `/`
+- Importante: Añadir `permissions: contents: write` al workflow
+
+---
+
+*Última actualización: 2026-03-26 - Configurado PWA deployment a GitHub Pages, corregidos mounted checks en BP session/history screens.*
