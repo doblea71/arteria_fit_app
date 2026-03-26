@@ -55,6 +55,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
   Future<void> _loadSession() async {
     final service = ref.read(bpProtocolServiceProvider);
     final session = await service.getSession(widget.sessionId);
+    if (!mounted) return;
 
     if (session != null && session.readings.isNotEmpty) {
       for (int i = 0; i < session.readings.length && i < 3; i++) {
@@ -67,10 +68,12 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
       }
       _currentReading = session.readings.length;
       if (_currentReading >= 3) {
-        if (mounted) context.pop();
+        context.pop();
         return;
       }
     }
+
+    if (!mounted) return;
 
     setState(() {
       _session = session;
@@ -178,6 +181,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
       diastolic: diastolic,
       pulse: pulse,
     );
+    if (!mounted) return;
 
     setState(() {
       _readings[_currentReading] = {
