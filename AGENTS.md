@@ -116,10 +116,6 @@ Para evitar advertencias de depreciación (deprecation warnings) y seguir los es
 - **Colores:** NO usar `onBackground` ni `background`. Usar `onSurface` y `surface` respectivamente.
 - **Opacidad:** Preferir el uso de `color.withValues(alpha: 0.1)` en lugar de `color.withOpacity(0.1)` para manejar la transparencia de forma más moderna.
 
-## Regla de Versionado — Obligatoria en toda modificación
-
-Cada vez que realices **cualquier modificación** al proyecto, **debes actualizar la versión** en `pubspec.yaml` siguiendo estas reglas sin excepción.
-
 ---
 
 ## Comandos de Gestión
@@ -132,6 +128,10 @@ Cada vez que realices **cualquier modificación** al proyecto, **debes actualiza
 - **`/commit`** → crear commit en español
 
 ---
+
+## Regla de Versionado — Obligatoria en toda modificación
+
+Cada vez que realices **cualquier modificación** al proyecto, **debes actualizar la versión** en `pubspec.yaml` siguiendo estas reglas sin excepción.
 
 ### Formato de versión
 

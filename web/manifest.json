@@ -1,11 +1,11 @@
 {
-    "name": "arteria_fit_app",
-    "short_name": "arteria_fit_app",
+    "name": "ArteriaFit",
+    "short_name": "ArteriaFit",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0F1623",
+    "theme_color": "#3B82F6",
+    "description": "App de bienestar cardiovascular - Respiración guiada, ejercicios isométricos y nutrición",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
