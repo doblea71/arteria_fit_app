@@ -24,7 +24,7 @@ jobs:
         run: flutter pub get
 
       - name: Build web release
-        run: flutter build web --release --base-href "/doblea71/arteria_fit_app/"
+        run: flutter build web --release --base-href "/arteria_fit_app/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
