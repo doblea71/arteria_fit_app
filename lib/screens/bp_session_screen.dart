@@ -112,6 +112,7 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
     final pulse = int.tryParse(_pulseController.text);
 
     if (systolic == null || diastolic == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Ingresa valores de sistólica y diastólica'),
@@ -200,6 +201,8 @@ class _BpSessionScreenState extends ConsumerState<BpSessionScreen> {
           ),
         );
         _checkAndShowDonation();
+      }
+      if (mounted) {
         context.pop();
       }
     } else {

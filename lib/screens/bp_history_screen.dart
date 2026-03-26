@@ -31,6 +31,7 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
   Future<void> _loadHistory() async {
     final service = ref.read(bpProtocolServiceProvider);
     final protocols = await service.getProtocolHistory();
+    if (!mounted) return;
     setState(() {
       _protocols = protocols;
       _isLoading = false;
@@ -41,13 +42,16 @@ class _BpHistoryScreenState extends ConsumerState<BpHistoryScreen> {
   Future<void> _checkAndShowDonation() async {
     final db = DatabaseService();
     final readings = await db.getBloodPressureReadings();
+    if (!mounted) return;
 
     if (readings.length >= 20) {
       final donationService = DonationService();
       final shouldShow = await donationService.shouldShowDonationPrompt();
       if (shouldShow && mounted) {
         await donationService.markDonationPromptShown();
-        showDonationSheet(context);
+        if (mounted) {
+          showDonationSheet(context);
+        }
       }
     }
   }
